@@ -1,0 +1,185 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import SiteNav from "../components/SiteNav.astro";
+import IntroHero from "../components/IntroHero.astro";
+import FilmSection from "../components/FilmSection.astro";
+import ModelStage from "../components/ModelStage.astro";
+import { journalEntries } from "../data/journal";
+
+const base = import.meta.env.BASE_URL;
+const selected = [
+  { index: "01", type: "Graduation Film", title: "SHU TU", cn: "蔬途", image: "images/shutu-scene-03.jpg", href: "#shutu", theme: "acid" },
+  { index: "02", type: "3D Character / Cultural IP", title: "NUO OPERA", cn: "傩戏角色", image: "elements/nuo-character-01.png", href: "#worlds", theme: "cyan" },
+  { index: "03", type: "Spatial Interaction", title: "FREE MOGULE", cn: "自由命题", image: "elements/mogule-figure-02.png", href: "#experiments", theme: "coral" },
+];
+---
+
+<BaseLayout>
+  <SiteNav />
+  <main>
+    <IntroHero />
+
+    <section class="manifesto grid-surface" id="manifesto">
+      <div class="manifesto-count mono">001 / MANIFESTO</div>
+      <h2>I build characters, worlds,<br />and stories <em>you can step into.</em></h2>
+      <div class="manifesto-foot">
+        <p>王馨苑是一名数字媒体艺术设计师，关注角色、空间与互动叙事如何共同构成一个可进入的世界。</p>
+        <a class="circle-link" href="#work" aria-label="查看作品"><i data-lucide="arrow-down"></i></a>
+      </div>
+    </section>
+
+    <section class="selected-work" id="work">
+      <div class="section-head compact-head">
+        <div><p class="eyebrow">Selected Work</p><h2>THREE<br />ENTRIES</h2></div>
+        <p class="section-intro">不是按年份翻页，而是从三个入口进入动画、角色和交互空间。</p>
+      </div>
+      <div class="work-list">
+        {selected.map((project) => (
+          <a class={`work-row ${project.theme}`} href={project.href}>
+            <div class="work-index mono">{project.index}</div>
+            <div class="work-media"><img src={`${base}assets/${project.image}`} alt={`${project.title} 项目主视觉`} loading="lazy" /></div>
+            <div class="work-name"><span>{project.type}</span><h3>{project.title}</h3><p>{project.cn}</p></div>
+            <i data-lucide="arrow-up-right"></i>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <FilmSection />
+    <ModelStage />
+
+    <section class="nuo-archive light-band" aria-labelledby="nuo-title">
+      <div class="section-head">
+        <div><p class="eyebrow">Character / Mask / Derivatives</p><h2 id="nuo-title">NUO<br />ARCHIVE</h2></div>
+        <p class="section-intro">从文化符号、面具与人物比例出发，建立一套可延展的角色及衍生品系统。</p>
+      </div>
+      <div class="nuo-layer-scene" data-nuo-stage>
+        <div class="nuo-symbols" aria-hidden="true"><img src={`${base}assets/elements/nuo-mask-back.png`} alt="" /><img src={`${base}assets/elements/nuo-mask-angle.png`} alt="" /><img src={`${base}assets/elements/nuo-mask-front.png`} alt="" /></div>
+        <div class="nuo-characters">
+          <img class="is-active" src={`${base}assets/elements/nuo-character-01.png`} alt="傩戏角色一" data-nuo-character="0" />
+          <img src={`${base}assets/elements/nuo-character-02.png`} alt="傩戏角色二" data-nuo-character="1" />
+          <img src={`${base}assets/elements/nuo-character-03.png`} alt="傩戏角色三" data-nuo-character="2" />
+        </div>
+        <img class="nuo-paper" src={`${base}assets/elements/nuo-paper-money.png`} alt="纸钱纹样" aria-hidden="true" />
+        <div class="nuo-switcher" role="group" aria-label="切换傩戏角色">
+          <button class="is-active" type="button" data-nuo-button="0">01</button><button type="button" data-nuo-button="1">02</button><button type="button" data-nuo-button="2">03</button>
+        </div>
+        <p class="nuo-caption">Drag the 3D model above. Switch the source character here.</p>
+      </div>
+      <div class="derivative-strip">
+        <figure><img src={`${base}assets/elements/nuo-derivative-01.png`} alt="傩戏衍生设计一" loading="lazy" /><figcaption>01 / Derivative</figcaption></figure>
+        <figure><img src={`${base}assets/elements/nuo-derivative-02.png`} alt="傩戏衍生设计二" loading="lazy" /><figcaption>02 / Derivative</figcaption></figure>
+        <figure><img src={`${base}assets/elements/nuo-derivative-03.png`} alt="傩戏衍生设计三" loading="lazy" /><figcaption>03 / Derivative</figcaption></figure>
+      </div>
+    </section>
+
+    <section class="experiments dark-band" id="experiments">
+      <div class="section-head">
+        <div><p class="eyebrow">Spatial & Experimental Interaction</p><h2>RULES TO<br />WALK THROUGH</h2></div>
+        <p class="section-intro">把抽象命题变成身体可以经历的路线、循环和反馈。</p>
+      </div>
+      <article class="experiment-feature">
+        <div class="mogule-composition" data-parallax-scene>
+          <img class="mogule-world" src={`${base}assets/elements/mogule-world.png`} alt="FREE MOGULE 世界场景" loading="lazy" />
+          <img class="mogule-portal" src={`${base}assets/elements/mogule-portal.png`} alt="" aria-hidden="true" />
+          <img class="mogule-figure one" src={`${base}assets/elements/mogule-figure-01.png`} alt="FREE MOGULE 角色" loading="lazy" />
+          <img class="mogule-figure two" src={`${base}assets/elements/mogule-figure-02.png`} alt="FREE MOGULE 角色" loading="lazy" />
+          <img class="mogule-controller" src={`${base}assets/elements/mogule-controller.png`} alt="VR 手柄" aria-hidden="true" />
+        </div>
+        <div class="experiment-copy"><span class="mono">VR · IMMERSIVE EXPERIENCE</span><h3>FREE MOGULE</h3><p>围绕自由、循环与数字 142857 建立四层空间体验。观看者不只理解命题，而是通过行走进入它。</p></div>
+      </article>
+      <article class="experiment-feature reverse">
+        <div class="goose-composition" data-parallax-scene>
+          <img class="goose-postcard" src={`${base}assets/elements/goose-postcard.png`} alt="校园明信片" loading="lazy" />
+          <img class="goose g1" src={`${base}assets/elements/goose-player.png`} alt="玩家雁角色" loading="lazy" />
+          <img class="goose g2" src={`${base}assets/elements/goose-delivery.png`} alt="送餐雁角色" loading="lazy" />
+          <img class="goose g3" src={`${base}assets/elements/goose-electronic.png`} alt="电子雁角色" loading="lazy" />
+          <img class="goose g4" src={`${base}assets/elements/goose-security.png`} alt="网安雁角色" loading="lazy" />
+        </div>
+        <div class="experiment-copy"><span class="mono">GAME · INTERACTION</span><h3>POST GOOSE</h3><p>以游戏机制组织视觉叙事，让动作、规则和反馈成为项目表达的一部分。</p></div>
+      </article>
+    </section>
+
+    <section class="stories light-band" id="stories">
+      <div class="section-head compact-head">
+        <div><p class="eyebrow">Stories & Characters</p><h2>DRAWN,<br />THEN MOVING</h2></div>
+        <p class="section-intro">分镜、漫画、角色与 AIGC 动画实验，共同记录人物被创造出来的过程。</p>
+      </div>
+      <div class="story-grid">
+        <figure class="story-large lantern-composition">
+          <img class="lantern-title" src={`${base}assets/elements/lantern-title.png`} alt="花灯缘" loading="lazy" />
+          <img class="lantern-person" src={`${base}assets/elements/lantern-character.png`} alt="花灯缘角色" loading="lazy" />
+          <img class="lantern-door" src={`${base}assets/elements/lantern-xiaoyuan-door.png`} alt="小元进家门" loading="lazy" />
+          <figcaption><b>花灯缘</b><span>AIGC-assisted Animation</span></figcaption>
+        </figure>
+        <figure class="lantern-frames"><div><img src={`${base}assets/elements/lantern-shot-look.png`} alt="花灯缘镜头一" loading="lazy" /><img src={`${base}assets/elements/lantern-shot-fish.png`} alt="花灯缘镜头二" loading="lazy" /><img src={`${base}assets/elements/lantern-shot-sky.png`} alt="花灯缘镜头三" loading="lazy" /></div><figcaption><b>Light & Shots</b><span>Visual Storytelling</span></figcaption></figure>
+        <figure class="comic-stack"><div><img src={`${base}assets/elements/comic-cover.png`} alt="倒转漫画封面" loading="lazy" /><img src={`${base}assets/elements/comic-page-01.png`} alt="倒转漫画第一页" loading="lazy" /><img src={`${base}assets/elements/comic-page-02.png`} alt="倒转漫画第二页" loading="lazy" /></div><figcaption><b>倒转</b><span>Personal Comic</span></figcaption></figure>
+      </div>
+    </section>
+
+    <section class="commercial grid-surface" id="commercial">
+      <div class="commercial-title"><p class="eyebrow">Commercial / Internship</p><h2>REAL BRIEFS.<br />REAL DELIVERY.</h2></div>
+      <div class="commercial-list">
+        <article><span class="mono">01</span><h3>Sohu New Media</h3><p>赛事宣传、采访、短视频与平面视觉</p><div class="poster-pair"><img src={`${base}assets/elements/internship-poster-01.png`} alt="搜狐实习海报一" loading="lazy" /><img src={`${base}assets/elements/internship-poster-02.png`} alt="搜狐实习海报二" loading="lazy" /></div></article>
+        <article><span class="mono">02</span><h3>Campaign Objects</h3><p>从视觉系统中拆出的线下媒介与活动物料</p><img src={`${base}assets/elements/internship-sign.png`} alt="活动麦牌设计" loading="lazy" /></article>
+      </div>
+    </section>
+
+    <section class="journal-preview dark-band">
+      <div class="section-head compact-head">
+        <div><p class="eyebrow">Personal Journal</p><h2>NOTES FROM<br />THE PROCESS</h2></div>
+        <a class="text-button light" href={`${base}journal/`}><span>Open Journal</span><i data-lucide="arrow-up-right"></i></a>
+      </div>
+      <div class="journal-rows">
+        {journalEntries.map((entry) => (
+          <a href={`${base}journal/${entry.slug}/`}>
+            <span class="mono">{entry.date}</span><div><small>{entry.category}</small><h3>{entry.titleEn}</h3><p>{entry.title}</p></div><i data-lucide="arrow-up-right"></i>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <section class="about light-band" id="about">
+      <div class="about-index mono">ABOUT · CONTACT</div>
+      <div class="about-copy"><h2>WANG<br />XINYUAN</h2><p>数字媒体艺术设计师。以角色为线索，在 3D、动画、交互和游戏之间搭建可以被观看，也可以被进入的叙事空间。</p></div>
+      <div class="about-meta"><div><span>Focus</span><p>Character / World / Motion / Interaction</p></div><div><span>Tools</span><p>Blender / C4D / Unity / Adobe CC / AIGC</p></div><div><span>Contact</span><p>请在发布前填写邮箱与社交账号</p></div></div>
+      <footer><span>© 2026 Wang Xinyuan</span><a href="#">Back to top <i data-lucide="arrow-up-right"></i></a></footer>
+    </section>
+  </main>
+
+  <script>
+    import gsap from "gsap";
+    import { ScrollTrigger } from "gsap/ScrollTrigger";
+    gsap.registerPlugin(ScrollTrigger);
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!reduced) {
+      gsap.utils.toArray<HTMLElement>(".work-row").forEach((row) => {
+        gsap.from(row, { y: 70, opacity: 0, duration: 0.9, ease: "power3.out", scrollTrigger: { trigger: row, start: "top 84%" } });
+      });
+      gsap.utils.toArray<HTMLElement>(".section-head h2, .manifesto h2").forEach((heading) => {
+        gsap.from(heading, { yPercent: 18, opacity: 0, duration: 1, ease: "power3.out", scrollTrigger: { trigger: heading, start: "top 86%" } });
+      });
+      gsap.utils.toArray<HTMLElement>(".experiment-feature, .story-grid figure").forEach((item) => {
+        gsap.from(item, { clipPath: "inset(0 0 100% 0)", duration: 1.05, ease: "power3.inOut", scrollTrigger: { trigger: item, start: "top 82%" } });
+      });
+      gsap.to(".nuo-symbols img", { y: (index) => index % 2 ? 28 : -22, rotation: (index) => (index - 1) * 4, ease: "none", scrollTrigger: { trigger: ".nuo-layer-scene", start: "top bottom", end: "bottom top", scrub: 1 } });
+      gsap.to(".nuo-paper", { y: -90, rotation: 22, ease: "none", scrollTrigger: { trigger: ".nuo-layer-scene", start: "top bottom", end: "bottom top", scrub: 1 } });
+      document.querySelectorAll<HTMLElement>("[data-parallax-scene]").forEach((scene) => {
+        scene.addEventListener("pointermove", (event) => {
+          const rect = scene.getBoundingClientRect();
+          const x = (event.clientX - rect.left) / rect.width - .5;
+          const y = (event.clientY - rect.top) / rect.height - .5;
+          gsap.to(scene.querySelectorAll("img:not(:first-child)"), { x: (i) => x * (i + 1) * 14, y: (i) => y * (i + 1) * 10, duration: .6, ease: "power2.out" });
+        });
+      });
+    }
+
+    const characters = document.querySelectorAll<HTMLElement>("[data-nuo-character]");
+    const characterButtons = document.querySelectorAll<HTMLButtonElement>("[data-nuo-button]");
+    characterButtons.forEach((button) => button.addEventListener("click", () => {
+      const index = button.dataset.nuoButton;
+      characters.forEach((character) => character.classList.toggle("is-active", character.dataset.nuoCharacter === index));
+      characterButtons.forEach((item) => item.classList.toggle("is-active", item === button));
+    }));
+  </script>
+</BaseLayout>

@@ -1,0 +1,32 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SiteNav from "../../components/SiteNav.astro";
+import { journalEntries } from "../../data/journal";
+
+export function getStaticPaths() {
+  return journalEntries.map((entry) => ({ params: { slug: entry.slug }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title={`${entry.title} · 王馨苑`} description={entry.excerpt}>
+  <SiteNav />
+  <main class="article-page grid-surface">
+    <a class="article-back" href={`${base}journal/`}><i data-lucide="chevron-left"></i>Back to Journal</a>
+    <header class="article-head">
+      <div><span class="mono">{entry.date}</span><p class="eyebrow">{entry.category}</p></div>
+      <div><h1>{entry.titleEn}</h1><h2>{entry.title}</h2></div>
+    </header>
+    <article class="article-body">
+      <p class="article-lead">{entry.excerpt}</p>
+      {entry.body.map((paragraph: string) => <p>{paragraph}</p>)}
+    </article>
+  </main>
+</BaseLayout>
+
+<style>
+  .article-head .eyebrow { margin-top: 18px; }
+  .article-lead { padding-bottom: 40px; border-bottom: 1px solid var(--line); font-size: 24px !important; font-weight: 700; line-height: 1.55 !important; }
+</style>

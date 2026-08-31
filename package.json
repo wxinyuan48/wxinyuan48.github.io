@@ -1,0 +1,22 @@
+{
+  "name": "wang-xinyuan-portfolio",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/check": "latest",
+    "astro": "latest",
+    "gsap": "latest",
+    "lucide": "latest",
+    "three": "latest",
+    "typescript": "5.9.3"
+  },
+  "devDependencies": {
+    "@types/three": "latest"
+  }
+}

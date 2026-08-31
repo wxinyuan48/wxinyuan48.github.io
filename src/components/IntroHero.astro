@@ -1,0 +1,156 @@
+---
+const base = import.meta.env.BASE_URL;
+---
+
+<section class="intro" data-intro>
+  <video
+    class="intro-fallback"
+    data-intro-video
+    src={`${base}assets/video/intro-live2d.mp4`}
+    poster={`${base}assets/images/intro-poster.jpg`}
+    muted
+    loop
+    playsinline
+    autoplay
+  ></video>
+  <div class="intro-canvas" data-intro-canvas aria-hidden="true"></div>
+  <div class="intro-shade" aria-hidden="true"></div>
+  <div class="intro-meta mono"><span>Portfolio · 2026</span><span>Shanghai / China</span></div>
+  <div class="intro-copy">
+    <p class="eyebrow">Spatial Narrative & Interaction Designer</p>
+    <h1>WANG<br />XINYUAN</h1>
+    <p class="intro-line">角色、世界与互动叙事设计</p>
+  </div>
+  <a class="intro-enter" href="#manifesto">
+    <span>Enter the world</span>
+    <i data-lucide="arrow-down"></i>
+  </a>
+  <div class="ripple-hint mono">MOVE TO DISTURB</div>
+</section>
+
+<script>
+  import * as THREE from "three";
+
+  const root = document.querySelector<HTMLElement>("[data-intro]");
+  const holder = root?.querySelector<HTMLElement>("[data-intro-canvas]");
+  const video = root?.querySelector<HTMLVideoElement>("[data-intro-video]");
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (root && holder && video && !reduceMotion) {
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: false, powerPreference: "high-performance" });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 1.5));
+    holder.appendChild(renderer.domElement);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    const texture = new THREE.VideoTexture(video);
+    texture.colorSpace = THREE.SRGBColorSpace;
+    texture.minFilter = THREE.LinearFilter;
+    texture.magFilter = THREE.LinearFilter;
+
+    const ripples = Array.from({ length: 8 }, () => new THREE.Vector3(-2, -2, -10));
+    const uniforms = {
+      uVideo: { value: texture },
+      uTime: { value: 0 },
+      uResolution: { value: new THREE.Vector2(1, 1) },
+      uVideoSize: { value: new THREE.Vector2(16, 9) },
+      uRipples: { value: ripples },
+    };
+
+    const material = new THREE.ShaderMaterial({
+      uniforms,
+      vertexShader: `
+        varying vec2 vUv;
+        void main(){ vUv = uv; gl_Position = vec4(position, 1.0); }
+      `,
+      fragmentShader: `
+        precision highp float;
+        varying vec2 vUv;
+        uniform sampler2D uVideo;
+        uniform float uTime;
+        uniform vec2 uResolution;
+        uniform vec2 uVideoSize;
+        uniform vec3 uRipples[8];
+
+        vec2 coverUv(vec2 uv){
+          float screenAspect = uResolution.x / uResolution.y;
+          float mediaAspect = uVideoSize.x / uVideoSize.y;
+          if (screenAspect > mediaAspect) {
+            float s = mediaAspect / screenAspect;
+            uv.y = uv.y * s + (1.0 - s) * 0.5;
+          } else {
+            float s = screenAspect / mediaAspect;
+            uv.x = uv.x * s + (1.0 - s) * 0.5;
+          }
+          return uv;
+        }
+
+        void main(){
+          vec2 uv = vUv;
+          vec2 rippleOffset = vec2(0.0);
+          float rippleLight = 0.0;
+          for(int i = 0; i < 8; i++){
+            float age = uTime - uRipples[i].z;
+            if(age > 0.0 && age < 2.2){
+              vec2 delta = uv - uRipples[i].xy;
+              delta.x *= uResolution.x / uResolution.y;
+              float dist = length(delta);
+              float ring = sin(dist * 72.0 - age * 10.0);
+              float envelope = exp(-dist * 7.5) * exp(-age * 1.65);
+              rippleOffset += normalize(delta + 0.0001) * ring * envelope * 0.023;
+              rippleLight += ring * envelope;
+            }
+          }
+          vec2 sampleUv = coverUv(uv + rippleOffset);
+          vec3 color = texture2D(uVideo, sampleUv).rgb;
+          color += rippleLight * 0.055;
+          float grain = fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233))) * 43758.5453);
+          color += (grain - 0.5) * 0.018;
+          gl_FragColor = vec4(color, 1.0);
+        }
+      `,
+    });
+
+    scene.add(new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material));
+    const timer = new THREE.Timer();
+    let rippleIndex = 0;
+    let lastRipple = 0;
+    let frame = 0;
+
+    const resize = () => {
+      const rect = root.getBoundingClientRect();
+      renderer.setSize(rect.width, rect.height, false);
+      uniforms.uResolution.value.set(rect.width, rect.height);
+      if (video.videoWidth) uniforms.uVideoSize.value.set(video.videoWidth, video.videoHeight);
+    };
+    const addRipple = (event: PointerEvent) => {
+      const now = performance.now();
+      if (event.type === "pointermove" && now - lastRipple < 90) return;
+      lastRipple = now;
+      const rect = root.getBoundingClientRect();
+      ripples[rippleIndex].set((event.clientX - rect.left) / rect.width, 1 - (event.clientY - rect.top) / rect.height, timer.getElapsed());
+      rippleIndex = (rippleIndex + 1) % ripples.length;
+    };
+    const render = () => {
+      timer.update();
+      uniforms.uTime.value = timer.getElapsed();
+      renderer.render(scene, camera);
+      frame = requestAnimationFrame(render);
+    };
+
+    video.addEventListener("loadedmetadata", resize, { once: true });
+    video.play().catch(() => undefined);
+    root.addEventListener("pointermove", addRipple);
+    root.addEventListener("pointerdown", addRipple);
+    window.addEventListener("resize", resize);
+    resize();
+    render();
+
+    document.addEventListener("astro:before-swap", () => {
+      cancelAnimationFrame(frame);
+      renderer.dispose();
+      material.dispose();
+      texture.dispose();
+    }, { once: true });
+  }
+</script>

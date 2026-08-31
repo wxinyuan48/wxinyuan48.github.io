@@ -1,0 +1,22 @@
+---
+const base = import.meta.env.BASE_URL;
+---
+
+<header class="site-nav" data-nav>
+  <a class="wordmark" href={`${base}`} aria-label="返回首页">WXY.</a>
+  <nav aria-label="主导航">
+    <a href={`${base}#work`}>Work</a>
+    <a href={`${base}#worlds`}>Worlds</a>
+    <a href={`${base}journal/`}>Journal</a>
+    <a href={`${base}#about`}>About</a>
+  </nav>
+  <button class="nav-menu icon-button" type="button" aria-label="打开导航" data-nav-toggle>
+    <i data-lucide="menu"></i>
+  </button>
+</header>
+
+<script>
+  const nav = document.querySelector<HTMLElement>("[data-nav]");
+  document.querySelector("[data-nav-toggle]")?.addEventListener("click", () => nav?.classList.toggle("is-open"));
+  window.addEventListener("scroll", () => nav?.classList.toggle("is-scrolled", window.scrollY > 24), { passive: true });
+</script>

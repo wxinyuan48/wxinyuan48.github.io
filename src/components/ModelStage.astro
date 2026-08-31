@@ -1,0 +1,158 @@
+---
+const base = import.meta.env.BASE_URL;
+---
+
+<section
+  class="model-stage"
+  id="worlds"
+  data-model-stage
+  data-model-url={`${base}assets/3d/xi_sikao3.fbx`}
+  data-texture-url={`${base}assets/3d/xi_sikao3-texture.png`}
+>
+  <div class="model-canvas" data-model-canvas aria-label="可拖拽旋转的 3D 角色模型"></div>
+  <img class="model-fallback" src={`${base}assets/elements/nuo-character-01.png`} alt="傩戏角色设计" loading="lazy" data-model-fallback />
+  <div class="model-title">
+    <p class="eyebrow">Interactive 3D Archive</p>
+    <h2>THE<br />OTHER<br />SIDE</h2>
+  </div>
+  <div class="model-controls">
+    <div class="model-progress"><span data-model-status>Loading 3D</span><b data-model-progress></b></div>
+    <span class="drag-note"><i data-lucide="rotate-3d"></i> Drag to rotate</span>
+  </div>
+  <aside class="mini-tv" aria-label="蔬途影片片段">
+    <div class="tv-top"><span>SHU TV</span><span class="tv-live">LIVE</span></div>
+    <video src={`${base}assets/video/shutu-tv-loop.mp4`} poster={`${base}assets/images/shutu-scene-03.jpg`} muted loop autoplay playsinline></video>
+    <div class="tv-scan" aria-hidden="true"></div>
+  </aside>
+</section>
+
+<script>
+  import * as THREE from "three";
+  import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader.js";
+  import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+
+  const stage = document.querySelector<HTMLElement>("[data-model-stage]");
+  const holder = stage?.querySelector<HTMLElement>("[data-model-canvas]");
+  const fallback = stage?.querySelector<HTMLElement>("[data-model-fallback]");
+  const status = stage?.querySelector<HTMLElement>("[data-model-status]");
+  const progress = stage?.querySelector<HTMLElement>("[data-model-progress]");
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (stage && holder && !reduced) {
+    let initialized = false;
+    const start = () => {
+      if (initialized) return;
+      initialized = true;
+
+      const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
+      renderer.setPixelRatio(Math.min(devicePixelRatio, 1.6));
+      renderer.outputColorSpace = THREE.SRGBColorSpace;
+      renderer.toneMapping = THREE.ACESFilmicToneMapping;
+      renderer.toneMappingExposure = 1.15;
+      holder.appendChild(renderer.domElement);
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(32, 1, 0.01, 100);
+      camera.position.set(0, 0.5, 5);
+      scene.add(new THREE.HemisphereLight(0xffffff, 0x97b96a, 2.8));
+      const key = new THREE.DirectionalLight(0xfff3df, 3.5);
+      key.position.set(3, 5, 4);
+      scene.add(key);
+      const colorLight = new THREE.DirectionalLight(0x78e6ff, 1.8);
+      colorLight.position.set(-4, 1, -2);
+      scene.add(colorLight);
+
+      const controls = new OrbitControls(camera, renderer.domElement);
+      controls.enableDamping = true;
+      controls.enablePan = false;
+      controls.minDistance = 2.1;
+      controls.maxDistance = 8;
+      controls.autoRotate = true;
+      controls.autoRotateSpeed = 0.65;
+
+      let model: THREE.Object3D | undefined;
+      let mixer: THREE.AnimationMixer | undefined;
+      const timer = new THREE.Timer();
+      const textureLoader = new THREE.TextureLoader();
+      const texture = textureLoader.load(stage.dataset.textureUrl || "");
+      texture.colorSpace = THREE.SRGBColorSpace;
+      texture.flipY = false;
+
+      const loader = new FBXLoader();
+      loader.load(stage.dataset.modelUrl || "", (object) => {
+        object.traverse((child) => {
+          if (child instanceof THREE.Mesh) {
+            const materials = Array.isArray(child.material) ? child.material : [child.material];
+            materials.forEach((material) => {
+              if (material && "map" in material) {
+                material.map = texture;
+                material.roughness = 0.78;
+                material.metalness = 0.05;
+                material.needsUpdate = true;
+              }
+            });
+          }
+        });
+        const box = new THREE.Box3().setFromObject(object);
+        const size = box.getSize(new THREE.Vector3());
+        const center = box.getCenter(new THREE.Vector3());
+        const scale = 3.25 / Math.max(size.x, size.y, size.z);
+        object.scale.setScalar(scale);
+        object.position.sub(center.multiplyScalar(scale));
+        object.position.y -= 0.2;
+        scene.add(object);
+        model = object;
+
+        if (object.animations.length) {
+          mixer = new THREE.AnimationMixer(object);
+          mixer.clipAction(object.animations[0]).play();
+        }
+        fallback?.classList.add("is-hidden");
+        holder.classList.add("is-ready");
+        if (status) status.textContent = object.animations.length ? "Animated FBX · Ready" : "FBX · Ready";
+        if (progress) progress.style.width = "100%";
+      }, (event) => {
+        if (!event.total) return;
+        const ratio = Math.round(event.loaded / event.total * 100);
+        if (status) status.textContent = `Loading 3D · ${ratio}%`;
+        if (progress) progress.style.width = `${ratio}%`;
+      }, () => {
+        if (status) status.textContent = "3D preview unavailable";
+      });
+
+      const resize = () => {
+        const rect = holder.getBoundingClientRect();
+        renderer.setSize(rect.width, rect.height, false);
+        camera.aspect = rect.width / rect.height;
+        camera.updateProjectionMatrix();
+      };
+      let frame = 0;
+      const render = () => {
+        timer.update();
+        const delta = Math.min(timer.getDelta(), 0.05);
+        mixer?.update(delta);
+        if (model) model.rotation.z = Math.sin(performance.now() * 0.00035) * 0.025;
+        controls.update();
+        renderer.render(scene, camera);
+        frame = requestAnimationFrame(render);
+      };
+      window.addEventListener("resize", resize);
+      resize();
+      render();
+
+      document.addEventListener("astro:before-swap", () => {
+        cancelAnimationFrame(frame);
+        renderer.dispose();
+        controls.dispose();
+        texture.dispose();
+      }, { once: true });
+    };
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0]?.isIntersecting) {
+        start();
+        observer.disconnect();
+      }
+    }, { rootMargin: "600px" });
+    observer.observe(stage);
+  }
+</script>

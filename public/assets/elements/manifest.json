@@ -1,0 +1,42 @@
+[
+  {
+    "file": "mogule-figure-01.png",
+    "document": "top",
+    "artboard": "02-01",
+    "layer": "669baf614c71a1537010b6ae78ec277b",
+    "size": [
+      1326,
+      1768
+    ]
+  },
+  {
+    "file": "mogule-sculpture.png",
+    "document": "top",
+    "artboard": "02-02",
+    "layer": "石膏",
+    "size": [
+      1800,
+      1001
+    ]
+  },
+  {
+    "file": "mogule-scene-01.png",
+    "document": "top",
+    "artboard": "02-02",
+    "layer": "49c70dc5c47b2601906ce18212f9581e",
+    "size": [
+      1744,
+      1368
+    ]
+  },
+  {
+    "file": "mogule-scene-02.png",
+    "document": "top",
+    "artboard": "02-02",
+    "layer": "eab519222889ec0e9ff970d5164e468e",
+    "size": [
+      1075,
+      659
+    ]
+  }
+]

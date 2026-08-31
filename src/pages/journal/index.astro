@@ -1,0 +1,32 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import SiteNav from "../../components/SiteNav.astro";
+import { journalEntries } from "../../data/journal";
+const base = import.meta.env.BASE_URL;
+---
+
+<BaseLayout title="Journal · 王馨苑" description="王馨苑的创作札记、视觉日记与项目记录。">
+  <SiteNav />
+  <main class="journal-page grid-surface">
+    <header class="journal-hero">
+      <span class="mono">PERSONAL BLOG · 2026</span>
+      <div><p class="eyebrow">Journal</p><h1>PROCESS<br />NOTES</h1><p>草图、角色、镜头、空间和交互实验的个人记录。这里保留作品完成之前仍在变化的部分。</p></div>
+    </header>
+    <div class="journal-rows journal-light">
+      {journalEntries.map((entry) => (
+        <a href={`${base}journal/${entry.slug}/`}>
+          <span class="mono">{entry.date}</span>
+          <div><small>{entry.category}</small><h3>{entry.titleEn}</h3><p>{entry.title}</p></div>
+          <i data-lucide="arrow-up-right"></i>
+        </a>
+      ))}
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .journal-light { border-color: var(--line); }
+  .journal-light a { border-color: var(--line); }
+  .journal-light a:hover { background: var(--acid); }
+  .journal-light small { color: var(--muted); }
+</style>

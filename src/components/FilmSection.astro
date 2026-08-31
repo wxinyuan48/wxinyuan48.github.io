@@ -1,0 +1,86 @@
+---
+const base = import.meta.env.BASE_URL;
+const chapters = [
+  ["01", "The Ordinary World", "普通的日常里，蔬菜角色拥有了自己的情绪与秩序。", "shutu-scene-01.jpg"],
+  ["02", "The Fall", "一次坠落让熟悉的空间失去方向，故事从现实滑向内心。", "shutu-scene-02.jpg"],
+  ["03", "The Other Side", "水墨山体与异世界展开，寻找成为角色理解自己的方式。", "shutu-scene-03.jpg"],
+  ["04", "The Search", "色彩被收紧，冲突在陌生仓库里显出轮廓。", "shutu-scene-04.jpg"],
+  ["05", "Return / Reflection", "返回并不意味着回到原点，角色带着新的目光重新看日常。", "shutu-scene-05.jpg"],
+];
+---
+
+<section class="film-section dark-band" id="shutu" data-film>
+  <div class="section-head film-head">
+    <div>
+      <p class="eyebrow">Graduation Film · 3D Animation · 2026</p>
+      <h2>SHU TU<br /><span>蔬途</span></h2>
+    </div>
+    <p class="section-intro">一段关于普通、坠落、寻找与返回的 3D 动画叙事。沿着五个空间状态，进入这部毕业作品的情绪路径。</p>
+  </div>
+
+  <div class="film-chapters">
+    {chapters.map(([number, title, description, image]) => (
+      <article class="film-chapter">
+        <img src={`${base}assets/images/${image}`} alt={`${title} 场景画面`} loading="lazy" />
+        <div class="film-chapter-copy">
+          <span class="mono">{number} / 05</span>
+          <h3>{title}</h3>
+          <p>{description}</p>
+        </div>
+      </article>
+    ))}
+  </div>
+
+  <div class="film-outro">
+    <div><span class="mono">03:28</span><p>Full film · H.264 · Stereo</p></div>
+    <button class="text-button light" type="button" data-film-open>
+      <span>Watch Full Film</span><i data-lucide="play"></i>
+    </button>
+  </div>
+</section>
+
+<dialog class="film-dialog" data-film-dialog>
+  <div class="film-dialog-bar">
+    <div><strong>SHU TU / 蔬途</strong><span class="mono">FULL FILM · 2026</span></div>
+    <button class="icon-button" type="button" aria-label="关闭影片" data-film-close><i data-lucide="x"></i></button>
+  </div>
+  <video controls playsinline preload="none" poster={`${base}assets/images/shutu-scene-01.jpg`} data-full-film>
+    <source src={`${base}assets/video/shutu-full-web.mp4`} type="video/mp4" />
+  </video>
+</dialog>
+
+<script>
+  import gsap from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  gsap.registerPlugin(ScrollTrigger);
+
+  const film = document.querySelector<HTMLElement>("[data-film]");
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (film && !reduced) {
+    film.querySelectorAll<HTMLElement>(".film-chapter").forEach((chapter) => {
+      gsap.fromTo(chapter.querySelector("img"), { scale: 1.08 }, {
+        scale: 1,
+        ease: "none",
+        scrollTrigger: { trigger: chapter, start: "top bottom", end: "bottom top", scrub: 0.7 },
+      });
+      gsap.from(chapter.querySelector(".film-chapter-copy"), {
+        y: 48, opacity: 0, duration: 0.8, ease: "power3.out",
+        scrollTrigger: { trigger: chapter, start: "top 68%" },
+      });
+    });
+  }
+
+  const dialog = document.querySelector<HTMLDialogElement>("[data-film-dialog]");
+  const video = dialog?.querySelector<HTMLVideoElement>("[data-full-film]");
+  document.querySelector("[data-film-open]")?.addEventListener("click", () => dialog?.showModal());
+  dialog?.querySelector("[data-film-close]")?.addEventListener("click", () => {
+    video?.pause();
+    dialog.close();
+  });
+  dialog?.addEventListener("click", (event) => {
+    if (event.target === dialog) {
+      video?.pause();
+      dialog.close();
+    }
+  });
+</script>
