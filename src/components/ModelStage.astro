@@ -10,7 +10,6 @@ const base = import.meta.env.BASE_URL;
   data-texture-url={`${base}assets/3d/xilanhua-texture.png`}
 >
   <div class="model-canvas" data-model-canvas aria-label="可拖拽旋转的 3D 角色模型"></div>
-  <img class="model-fallback" src={`${base}assets/elements/nuo-character-01.png`} alt="傩戏角色设计" loading="lazy" data-model-fallback />
   <div class="model-title">
     <p class="eyebrow">Interactive 3D Archive</p>
     <h2>THE<br />OTHER<br />SIDE</h2>
@@ -33,7 +32,6 @@ const base = import.meta.env.BASE_URL;
 
   const stage = document.querySelector<HTMLElement>("[data-model-stage]");
   const holder = stage?.querySelector<HTMLElement>("[data-model-canvas]");
-  const fallback = stage?.querySelector<HTMLElement>("[data-model-fallback]");
   const status = stage?.querySelector<HTMLElement>("[data-model-status]");
   const progress = stage?.querySelector<HTMLElement>("[data-model-progress]");
   const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -110,7 +108,6 @@ const base = import.meta.env.BASE_URL;
           mixer = new THREE.AnimationMixer(object);
           mixer.clipAction(object.animations[0]).play();
         }
-        fallback?.classList.add("is-hidden");
         holder.classList.add("is-ready");
         if (status) status.textContent = object.animations.length ? "Animated FBX · Ready" : "FBX · Ready";
         if (progress) progress.style.width = "100%";
