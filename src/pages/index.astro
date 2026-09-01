@@ -9,7 +9,7 @@ import { journalEntries } from "../data/journal";
 const base = import.meta.env.BASE_URL;
 const selected = [
   { index: "01", type: "Graduation Film", title: "SHU TU", cn: "蔬途", image: "images/shutu-scene-03.jpg", href: "#shutu", theme: "acid" },
-  { index: "02", type: "3D Character / Cultural IP", title: "NUO OPERA", cn: "傩戏角色", image: "elements/nuo-character-01.png", href: "#worlds", theme: "cyan" },
+  { index: "02", type: "3D Character / Cultural IP", title: "NUO OPERA", cn: "傩戏角色", image: "elements/nuo-folder-01.png", href: "#nuo", theme: "cyan" },
   { index: "03", type: "Spatial Interaction", title: "FREE MOGULE", cn: "自由命题", image: "elements/mogule-figure-02.png", href: "#experiments", theme: "coral" },
 ];
 ---
@@ -48,23 +48,33 @@ const selected = [
     <FilmSection />
     <ModelStage />
 
-    <section class="nuo-archive light-band" aria-labelledby="nuo-title">
+    <section class="nuo-archive light-band" id="nuo" aria-labelledby="nuo-title">
       <div class="section-head">
         <div><p class="eyebrow">Character / Mask / Derivatives</p><h2 id="nuo-title">NUO<br />ARCHIVE</h2></div>
         <p class="section-intro">从文化符号、面具与人物比例出发，建立一套可延展的角色及衍生品系统。</p>
       </div>
-      <div class="nuo-layer-scene" data-nuo-stage>
-        <div class="nuo-symbols" aria-hidden="true"><img src={`${base}assets/elements/nuo-mask-back.png`} alt="" /><img src={`${base}assets/elements/nuo-mask-angle.png`} alt="" /><img src={`${base}assets/elements/nuo-mask-front.png`} alt="" /></div>
-        <div class="nuo-characters">
-          <img class="is-active" src={`${base}assets/elements/nuo-character-01.png`} alt="傩戏角色一" data-nuo-character="0" />
-          <img src={`${base}assets/elements/nuo-character-02.png`} alt="傩戏角色二" data-nuo-character="1" />
-          <img src={`${base}assets/elements/nuo-character-03.png`} alt="傩戏角色三" data-nuo-character="2" />
+      <div class="nuo-layer-scene" data-nuo-stage tabindex="0" aria-label="傩戏角色圆环档案，可用方向键切换">
+        <div class="nuo-orbit" aria-hidden="true"><span></span><span></span><span></span></div>
+        <div class="nuo-archive-index mono"><span>NUO / CHARACTER FILES</span><b data-nuo-counter>01 — 03</b></div>
+        <div class="nuo-folders">
+          <button class="nuo-folder is-center" type="button" data-nuo-character="0" aria-label="查看镇山角色">
+            <span class="nuo-folder-tab mono">FILE 01</span><img src={`${base}assets/elements/nuo-folder-01.png`} alt="镇山傩戏角色" />
+          </button>
+          <button class="nuo-folder is-right" type="button" data-nuo-character="1" aria-label="查看赤角角色">
+            <span class="nuo-folder-tab mono">FILE 02</span><img src={`${base}assets/elements/nuo-folder-02.png`} alt="赤角傩戏角色" />
+          </button>
+          <button class="nuo-folder is-left" type="button" data-nuo-character="2" aria-label="查看青龙角色">
+            <span class="nuo-folder-tab mono">FILE 03</span><img src={`${base}assets/elements/nuo-folder-03.png`} alt="青龙傩戏角色" />
+          </button>
         </div>
-        <img class="nuo-paper" src={`${base}assets/elements/nuo-paper-money.png`} alt="纸钱纹样" aria-hidden="true" />
-        <div class="nuo-switcher" role="group" aria-label="切换傩戏角色">
-          <button class="is-active" type="button" data-nuo-button="0">01</button><button type="button" data-nuo-button="1">02</button><button type="button" data-nuo-button="2">03</button>
+        <div class="nuo-file-copy">
+          <p class="mono">ACTIVE CHARACTER</p><h3 data-nuo-name>ZHEN SHAN</h3><span data-nuo-cn>镇山 · 面具与少年</span>
         </div>
-        <p class="nuo-caption">Drag the 3D model above. Switch the source character here.</p>
+        <div class="nuo-ring-controls">
+          <button type="button" data-nuo-prev aria-label="上一个角色"><i data-lucide="arrow-left"></i></button>
+          <span class="mono">ROTATE FILE RING</span>
+          <button type="button" data-nuo-next aria-label="下一个角色"><i data-lucide="arrow-right"></i></button>
+        </div>
       </div>
       <div class="derivative-strip">
         <figure><img src={`${base}assets/elements/nuo-derivative-01.png`} alt="傩戏衍生设计一" loading="lazy" /><figcaption>01 / Derivative</figcaption></figure>
@@ -78,16 +88,49 @@ const selected = [
         <div><p class="eyebrow">Spatial & Experimental Interaction</p><h2>RULES TO<br />WALK THROUGH</h2></div>
         <p class="section-intro">把抽象命题变成身体可以经历的路线、循环和反馈。</p>
       </div>
-      <article class="experiment-feature">
-        <div class="mogule-composition" data-parallax-scene>
-          <img class="mogule-world" src={`${base}assets/elements/mogule-world.png`} alt="FREE MOGULE 世界场景" loading="lazy" />
-          <img class="mogule-portal" src={`${base}assets/elements/mogule-portal.png`} alt="" aria-hidden="true" />
-          <img class="mogule-figure one" src={`${base}assets/elements/mogule-figure-01.png`} alt="FREE MOGULE 角色" loading="lazy" />
-          <img class="mogule-figure two" src={`${base}assets/elements/mogule-figure-02.png`} alt="FREE MOGULE 角色" loading="lazy" />
-          <img class="mogule-controller" src={`${base}assets/elements/mogule-controller.png`} alt="VR 手柄" aria-hidden="true" />
+      <article class="mogule-feature" data-mogule-feature>
+        <div class="mogule-stage">
+          <div class="mogule-tiles" aria-hidden="true">{Array.from({ length: 12 }).map((_, index) => <span style={`--tile:${index}`}></span>)}</div>
+          <div class="mogule-stage-title"><span class="mono">VR · IMMERSIVE EXPERIENCE</span><h3>FREE<br />MOGULE</h3><p>自由模数 / 循环系统 / 142857</p></div>
+          <div class="mogule-branch branch-vr" aria-hidden="true"></div>
+          <div class="mogule-branch branch-controller" aria-hidden="true"></div>
+          <div class="mogule-branch branch-tracker" aria-hidden="true"></div>
+          <div class="mogule-node node-vr">
+            <span class="mono">HMD</span><img src={`${base}assets/elements/mogule-vr.png`} alt="VR 头显" />
+          </div>
+          <div class="mogule-node node-controller">
+            <span class="mono">RECEIVER</span><img src={`${base}assets/elements/mogule-controller.png`} alt="VR 控制器" />
+          </div>
+          <div class="mogule-node node-tracker"><span class="tracker-shape" aria-hidden="true"></span><b>TRACKERS</b><small class="mono">BODY / SPACE</small></div>
+          <div class="mogule-radar" aria-hidden="true"><i></i><i></i><i></i></div>
+          <img class="mogule-person" src={`${base}assets/elements/mogule-figure-02.png`} alt="佩戴 VR 头显体验 FREE MOGULE 的人物" />
+          <button class="mogule-enter" type="button" data-mogule-open><span>ENTER THE SYSTEM</span><i data-lucide="arrow-up-right"></i></button>
         </div>
-        <div class="experiment-copy"><span class="mono">VR · IMMERSIVE EXPERIENCE</span><h3>FREE MOGULE</h3><p>围绕自由、循环与数字 142857 建立四层空间体验。观看者不只理解命题，而是通过行走进入它。</p></div>
+        <div class="mogule-summary"><span class="mono">CORE PROPOSITION</span><p>围绕“自由”的悖论，将抽象命题拆成设备、身体与四层空间。人物先进入，系统随后在她周围被唤醒。</p></div>
       </article>
+
+      <dialog class="mogule-dialog" data-mogule-dialog>
+        <div class="mogule-dialog-bar"><div><b>FREE MOGULE</b><span class="mono">SYSTEM / 142857</span></div><button type="button" data-mogule-close aria-label="关闭项目界面"><i data-lucide="x"></i></button></div>
+        <div class="mogule-system-view">
+          <header><p class="eyebrow">Hierarchical Progression</p><h3>WALK THE<br />NUMBER</h3><span class="mono">01 — 04 / IMMERSIVE LEVELS</span></header>
+          <section class="mogule-levels" aria-label="四层空间递进">
+            <article><span class="level-dot"></span><img src={`${base}assets/elements/mogule-scene-01.png`} alt="黑暗锁链空间" /><div><b>01 / DARK CHAINS</b><p>限制感与幽暗起点</p></div></article>
+            <article><span class="level-dot"></span><img src={`${base}assets/elements/mogule-scene-02.png`} alt="枯叶木屋空间" /><div><b>02 / WITHERED CABIN</b><p>循环路径与选择</p></div></article>
+            <article><span class="level-dot"></span><img src={`${base}assets/elements/mogule-sculpture.png`} alt="荆棘雕塑空间" /><div><b>03 / DARK THORNS</b><p>主动突破边界</p></div></article>
+            <article><span class="level-dot"></span><img src={`${base}assets/elements/mogule-world.png`} alt="蒲公英自由空间" /><div><b>04 / DANDELION FIELD</b><p>从系统中重新返回</p></div></article>
+          </section>
+          <section class="mogule-number-sequence">
+            <p>走马灯数字</p><h4>142857</h4>
+            <div><span>142857</span><i data-lucide="chevrons-right"></i><span>285714</span><i data-lucide="chevrons-right"></i><span>428571</span><i data-lucide="chevrons-right"></i><span>571428</span></div>
+            <small>每一次移动都返回同一组数字，只改变观察位置。</small>
+          </section>
+          <section class="mogule-trace">
+            <p class="eyebrow">Development Trace</p>
+            <img src={`${base}assets/elements/mogule-portal.png`} alt="FREE MOGULE 传送门设计" />
+            <div><b>VR / UNREAL ENGINE</b><p>从概念草图、空间建构到沉浸式交互，把视觉线索变成玩家可以穿过的规则。</p></div>
+          </section>
+        </div>
+      </dialog>
       <article class="experiment-feature reverse">
         <div class="goose-composition" data-parallax-scene>
           <img class="goose-postcard" src={`${base}assets/elements/goose-postcard.png`} alt="校园明信片" loading="lazy" />
@@ -152,6 +195,7 @@ const selected = [
     import { ScrollTrigger } from "gsap/ScrollTrigger";
     gsap.registerPlugin(ScrollTrigger);
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
     if (!reduced) {
       gsap.utils.toArray<HTMLElement>(".work-row").forEach((row) => {
         gsap.from(row, { y: 70, opacity: 0, duration: 0.9, ease: "power3.out", scrollTrigger: { trigger: row, start: "top 84%" } });
@@ -162,8 +206,6 @@ const selected = [
       gsap.utils.toArray<HTMLElement>(".experiment-feature, .story-grid figure").forEach((item) => {
         gsap.from(item, { clipPath: "inset(0 0 100% 0)", duration: 1.05, ease: "power3.inOut", scrollTrigger: { trigger: item, start: "top 82%" } });
       });
-      gsap.to(".nuo-symbols img", { y: (index) => index % 2 ? 28 : -22, rotation: (index) => (index - 1) * 4, ease: "none", scrollTrigger: { trigger: ".nuo-layer-scene", start: "top bottom", end: "bottom top", scrub: 1 } });
-      gsap.to(".nuo-paper", { y: -90, rotation: 22, ease: "none", scrollTrigger: { trigger: ".nuo-layer-scene", start: "top bottom", end: "bottom top", scrub: 1 } });
       document.querySelectorAll<HTMLElement>("[data-parallax-scene]").forEach((scene) => {
         scene.addEventListener("pointermove", (event) => {
           const rect = scene.getBoundingClientRect();
@@ -172,14 +214,69 @@ const selected = [
           gsap.to(scene.querySelectorAll("img:not(:first-child)"), { x: (i) => x * (i + 1) * 14, y: (i) => y * (i + 1) * 10, duration: .6, ease: "power2.out" });
         });
       });
+
+      const mogule = document.querySelector<HTMLElement>("[data-mogule-feature]");
+      if (mogule) {
+        const person = mogule.querySelector<HTMLElement>(".mogule-person");
+        const timeline = gsap.timeline({ scrollTrigger: { trigger: mogule, start: "top 72%", once: true } });
+        timeline
+          .from(person, { yPercent: 16, opacity: 0, scale: .92, duration: 1.05, ease: "power4.out" })
+          .from(".mogule-tiles span", { xPercent: (index) => index % 2 ? 140 : -140, opacity: 0, duration: .75, stagger: { each: .035, from: "center" }, ease: "power3.out" }, "-=.48")
+          .from(".mogule-stage-title > *", { y: 28, opacity: 0, duration: .65, stagger: .08, ease: "power3.out" }, "-=.55")
+          .from(".mogule-branch", { scaleX: 0, duration: .55, stagger: .1, transformOrigin: "left center", ease: "power2.inOut" }, "-=.35")
+          .from(".mogule-node", { scale: .45, opacity: 0, duration: .58, stagger: .1, ease: "back.out(1.7)" }, "-=.28")
+          .from(".mogule-radar, .mogule-enter", { opacity: 0, scale: .8, duration: .5, stagger: .1, ease: "power2.out" }, "-=.2")
+          .call(() => gsap.to(person, { y: -9, rotation: -.7, duration: 2.8, repeat: -1, yoyo: true, ease: "sine.inOut" }));
+      }
     }
 
-    const characters = document.querySelectorAll<HTMLElement>("[data-nuo-character]");
-    const characterButtons = document.querySelectorAll<HTMLButtonElement>("[data-nuo-button]");
-    characterButtons.forEach((button) => button.addEventListener("click", () => {
-      const index = button.dataset.nuoButton;
-      characters.forEach((character) => character.classList.toggle("is-active", character.dataset.nuoCharacter === index));
-      characterButtons.forEach((item) => item.classList.toggle("is-active", item === button));
+    const nuoStage = document.querySelector<HTMLElement>("[data-nuo-stage]");
+    const nuoFiles = Array.from(document.querySelectorAll<HTMLButtonElement>("[data-nuo-character]"));
+    const nuoNames = [
+      ["ZHEN SHAN", "镇山 · 面具与少年"],
+      ["CHI JIAO", "赤角 · 火与祭礼"],
+      ["QING LONG", "青龙 · 水与游行"],
+    ];
+    let activeNuo = 0;
+    let nuoLocked = false;
+
+    const rotateNuo = (next: number, direction = 1) => {
+      if (!nuoStage || nuoLocked || next === activeNuo) return;
+      nuoLocked = true;
+      activeNuo = (next + nuoFiles.length) % nuoFiles.length;
+      nuoFiles.forEach((file, index) => {
+        const offset = (index - activeNuo + nuoFiles.length) % nuoFiles.length;
+        file.classList.toggle("is-center", offset === 0);
+        file.classList.toggle("is-right", offset === 1);
+        file.classList.toggle("is-left", offset === 2);
+        file.setAttribute("aria-current", offset === 0 ? "true" : "false");
+      });
+      const name = nuoStage.querySelector<HTMLElement>("[data-nuo-name]");
+      const cn = nuoStage.querySelector<HTMLElement>("[data-nuo-cn]");
+      const counter = nuoStage.querySelector<HTMLElement>("[data-nuo-counter]");
+      if (name) name.textContent = nuoNames[activeNuo][0];
+      if (cn) cn.textContent = nuoNames[activeNuo][1];
+      if (counter) counter.textContent = `0${activeNuo + 1} — 03`;
+      if (!reduced) {
+        gsap.to(".nuo-orbit", { rotation: `+=${direction * 120}`, duration: .9, ease: "power3.inOut" });
+        gsap.fromTo(".nuo-file-copy > *", { y: direction * 16, opacity: 0 }, { y: 0, opacity: 1, duration: .55, stagger: .055, ease: "power3.out" });
+      }
+      window.setTimeout(() => { nuoLocked = false; }, reduced ? 20 : 800);
+    };
+
+    nuoFiles.forEach((file, index) => file.addEventListener("click", () => {
+      if (index === activeNuo) return;
+      rotateNuo(index, (index - activeNuo + nuoFiles.length) % nuoFiles.length === 1 ? 1 : -1);
     }));
+    nuoStage?.querySelector<HTMLButtonElement>("[data-nuo-next]")?.addEventListener("click", () => rotateNuo(activeNuo + 1, 1));
+    nuoStage?.querySelector<HTMLButtonElement>("[data-nuo-prev]")?.addEventListener("click", () => rotateNuo(activeNuo - 1, -1));
+    nuoStage?.addEventListener("keydown", (event) => {
+      if (event.key === "ArrowRight") rotateNuo(activeNuo + 1, 1);
+      if (event.key === "ArrowLeft") rotateNuo(activeNuo - 1, -1);
+    });
+    const moguleDialog = document.querySelector<HTMLDialogElement>("[data-mogule-dialog]");
+    document.querySelector<HTMLButtonElement>("[data-mogule-open]")?.addEventListener("click", () => moguleDialog?.showModal());
+    moguleDialog?.querySelector<HTMLButtonElement>("[data-mogule-close]")?.addEventListener("click", () => moguleDialog.close());
+    moguleDialog?.addEventListener("click", (event) => { if (event.target === moguleDialog) moguleDialog.close(); });
   </script>
 </BaseLayout>
