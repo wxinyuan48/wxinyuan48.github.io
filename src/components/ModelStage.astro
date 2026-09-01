@@ -6,13 +6,12 @@ const base = import.meta.env.BASE_URL;
   class="model-stage"
   id="worlds"
   data-model-stage
-  data-model-url={`${base}assets/3d/xilanhua.fbx`}
-  data-texture-url={`${base}assets/3d/xilanhua-texture.png`}
+  data-model-url={`${base}assets/3d/broccoli.fbx`}
 >
   <div class="model-canvas" data-model-canvas aria-label="可拖拽旋转的 3D 角色模型"></div>
   <div class="model-title">
-    <p class="eyebrow">Interactive 3D Archive</p>
-    <h2>THE<br />OTHER<br />SIDE</h2>
+    <p class="eyebrow">角色之</p>
+    <h2>西兰花</h2>
   </div>
   <div class="model-controls">
     <div class="model-progress"><span data-model-status>Loading 3D</span><b data-model-progress></b></div>
@@ -46,19 +45,17 @@ const base = import.meta.env.BASE_URL;
       renderer.setPixelRatio(Math.min(devicePixelRatio, 1.6));
       renderer.outputColorSpace = THREE.SRGBColorSpace;
       renderer.toneMapping = THREE.ACESFilmicToneMapping;
-      renderer.toneMappingExposure = 1.15;
+      renderer.toneMappingExposure = 0.98;
       holder.appendChild(renderer.domElement);
 
       const scene = new THREE.Scene();
       const camera = new THREE.PerspectiveCamera(32, 1, 0.01, 100);
       camera.position.set(0, 0.5, 5);
-      scene.add(new THREE.HemisphereLight(0xffffff, 0x97b96a, 2.8));
-      const key = new THREE.DirectionalLight(0xfff3df, 3.5);
-      key.position.set(3, 5, 4);
-      scene.add(key);
-      const colorLight = new THREE.DirectionalLight(0x78e6ff, 1.8);
-      colorLight.position.set(-4, 1, -2);
-      scene.add(colorLight);
+      scene.add(new THREE.AmbientLight(0xfffdf7, 1.65));
+      scene.add(new THREE.HemisphereLight(0xffffff, 0xb8c7a6, 1.25));
+      const rimLight = new THREE.DirectionalLight(0xa7edff, 0.18);
+      rimLight.position.set(-4, 2, -3);
+      scene.add(rimLight);
 
       const controls = new OrbitControls(camera, renderer.domElement);
       controls.enableDamping = true;
@@ -71,33 +68,12 @@ const base = import.meta.env.BASE_URL;
       let model: THREE.Object3D | undefined;
       let mixer: THREE.AnimationMixer | undefined;
       const timer = new THREE.Timer();
-      const textureLoader = new THREE.TextureLoader();
-      const textureUrl = stage.dataset.textureUrl;
-      const texture = textureUrl ? textureLoader.load(textureUrl) : undefined;
-      if (texture) {
-        texture.colorSpace = THREE.SRGBColorSpace;
-        texture.flipY = false;
-      }
-
       const loader = new FBXLoader();
       loader.load(stage.dataset.modelUrl || "", (object) => {
-        object.traverse((child) => {
-          if (child instanceof THREE.Mesh) {
-            const materials = Array.isArray(child.material) ? child.material : [child.material];
-            materials.forEach((material) => {
-              if (material && texture && "map" in material) {
-                material.map = texture;
-                material.roughness = 0.78;
-                material.metalness = 0.05;
-                material.needsUpdate = true;
-              }
-            });
-          }
-        });
         const box = new THREE.Box3().setFromObject(object);
         const size = box.getSize(new THREE.Vector3());
         const center = box.getCenter(new THREE.Vector3());
-        const scale = 3.25 / Math.max(size.x, size.y, size.z);
+        const scale = 1.95 / Math.max(size.x, size.y, size.z);
         object.scale.setScalar(scale);
         object.position.sub(center.multiplyScalar(scale));
         object.position.y -= 0.2;
@@ -144,7 +120,6 @@ const base = import.meta.env.BASE_URL;
         cancelAnimationFrame(frame);
         renderer.dispose();
         controls.dispose();
-        texture?.dispose();
       }, { once: true });
     };
     const observer = new IntersectionObserver((entries) => {

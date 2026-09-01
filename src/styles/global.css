@@ -47,7 +47,7 @@ p { line-height: 1.65; }
 .intro-meta { position: absolute; top: 100px; right: var(--pad); left: var(--pad); display: flex; justify-content: space-between; }
 .intro-copy { position: absolute; right: 21vw; bottom: 66px; left: var(--pad); }
 .intro-copy .eyebrow { margin-bottom: 18px; text-shadow: 0 1px 14px rgba(0,0,0,.4); }
-.intro-glass-title { position: relative; isolation: isolate; width: min(84vw, 1040px); }
+.intro-glass-title { position: relative; isolation: isolate; width: min(80vw, 990px); }
 .intro-glass-title::before { display: none; }
 .intro-glass-title h1 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .intro-portfolio-art { display: block; width: 100%; height: auto; filter: drop-shadow(0 18px 24px rgba(99, 120, 255, .25)); pointer-events: none; }
@@ -105,7 +105,7 @@ p { line-height: 1.65; }
 .film-dialog-bar div { display: flex; align-items: baseline; gap: 16px; }
 .film-dialog video { width: 100%; height: calc(100% - 70px); object-fit: contain; background: black; }
 
-.model-stage { position: relative; height: 110svh; min-height: 760px; overflow: hidden; color: #111; background: #b9ff63; }
+.model-stage { position: relative; height: 110svh; min-height: 760px; overflow: hidden; color: #111; background: radial-gradient(circle at 54% 48%, #5f6258 0 19%, #97c95a 38%, #b9ff63 72%); }
 .model-canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
 .model-canvas { z-index: 2; cursor: grab; opacity: 0; transition: opacity .5s; }
 .model-canvas.is-ready { opacity: 1; }
@@ -321,7 +321,7 @@ p { line-height: 1.65; }
   .intro-meta span:last-child, .ripple-hint { display: none; }
   .intro-copy { right: var(--pad); bottom: 118px; }
   .intro-copy .eyebrow { max-width: 290px; }
-  .intro-glass-title { width: min(94vw, 620px); }
+  .intro-glass-title { width: min(89vw, 590px); }
   .intro-copy h1 span { padding-left: .18em; }
   .intro-line { max-width: 310px; margin-top: 22px; font-size: 11px; }
   .intro-enter { right: var(--pad); bottom: 28px; left: var(--pad); width: auto; }
