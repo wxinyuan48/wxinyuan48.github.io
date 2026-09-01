@@ -7,7 +7,7 @@ interface Props {
 }
 
 const {
-  title = "WORLDS IN MOTION · Digital Art Portfolio",
+  title = "PORTFOLIO · Wang Xinyuan",
   description = "王馨苑的个人博客与动态作品集：3D 角色、动画叙事、游戏与交互设计。",
 } = Astro.props;
 const base = import.meta.env.BASE_URL;
@@ -26,8 +26,8 @@ const base = import.meta.env.BASE_URL;
   <body>
     <slot />
     <script>
-      import { createIcons, ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, ChevronLeft, ChevronsRight, Maximize2, Menu, Pause, Play, Rotate3d, Volume2, VolumeX, X } from "lucide";
-      createIcons({ icons: { ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, ChevronLeft, ChevronsRight, Maximize2, Menu, Pause, Play, Rotate3d, Volume2, VolumeX, X } });
+      import { createIcons, ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, ChevronLeft, ChevronsRight, Maximize2, Menu, Move, Pause, Play, Rotate3d, Volume2, VolumeX, X } from "lucide";
+      createIcons({ icons: { ArrowDown, ArrowLeft, ArrowRight, ArrowUpRight, ChevronLeft, ChevronsRight, Maximize2, Menu, Move, Pause, Play, Rotate3d, Volume2, VolumeX, X } });
     </script>
   </body>
 </html>

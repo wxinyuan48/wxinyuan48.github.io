@@ -49,7 +49,7 @@ p { line-height: 1.65; }
 .intro-copy .eyebrow { margin-bottom: 18px; text-shadow: 0 1px 14px rgba(0,0,0,.4); }
 .intro-glass-title { position: relative; isolation: isolate; width: fit-content; }
 .intro-glass-title::before { content: ""; position: absolute; z-index: -1; inset: -10px -38px -18px -28px; border-top: 1px solid rgba(255,255,255,.45); border-bottom: 1px solid rgba(255,255,255,.18); background: rgba(255,255,255,.07); box-shadow: inset 0 1px rgba(255,255,255,.18), 0 22px 70px rgba(0,0,0,.14); backdrop-filter: blur(18px) saturate(1.25); mask-image: linear-gradient(90deg, #000 0 76%, transparent); }
-.intro-copy h1 { max-width: 11ch; color: transparent; background: linear-gradient(180deg, #fff 0%, rgba(255,255,255,.88) 48%, rgba(255,255,255,.18) 100%); background-clip: text; -webkit-background-clip: text; filter: drop-shadow(0 5px 18px rgba(0,0,0,.22)); font-size: clamp(62px, 9.8vw, 156px); line-height: .75; }
+.intro-copy h1 { position: relative; max-width: 11ch; color: transparent; background: linear-gradient(180deg, rgba(255,255,255,.98) 0%, rgba(255,255,255,.72) 45%, rgba(225,233,255,.2) 100%); background-clip: text; -webkit-background-clip: text; -webkit-text-stroke: 1px rgba(255,255,255,.64); text-shadow: -5px 8px 16px rgba(97,224,255,.18), 6px 12px 20px rgba(162,117,255,.22), 0 24px 36px rgba(0,0,0,.16); filter: drop-shadow(0 2px 1px rgba(255,255,255,.22)); font-size: clamp(62px, 9.8vw, 156px); line-height: .75; }
 .intro-copy h1 span { padding-left: .45em; }
 .intro-line { margin-top: 30px; font-size: 15px; text-transform: uppercase; }
 .intro-enter { position: absolute; right: var(--pad); bottom: 54px; display: flex; width: 160px; height: 58px; padding: 0 16px; align-items: center; justify-content: space-between; border: 1px solid rgba(255,255,255,.7); border-radius: 4px; font-size: 13px; font-weight: 700; backdrop-filter: blur(12px); }
@@ -322,7 +322,7 @@ p { line-height: 1.65; }
   .intro-copy { right: var(--pad); bottom: 118px; }
   .intro-copy .eyebrow { max-width: 290px; }
   .intro-glass-title::before { right: -18px; left: -20px; }
-  .intro-copy h1 { max-width: 12ch; font-size: clamp(52px, 15.5vw, 72px); line-height: .78; }
+  .intro-copy h1 { max-width: 100%; font-size: clamp(44px, 13vw, 56px); line-height: .78; white-space: nowrap; }
   .intro-copy h1 span { padding-left: .18em; }
   .intro-line { max-width: 310px; margin-top: 22px; font-size: 11px; }
   .intro-enter { right: var(--pad); bottom: 28px; left: var(--pad); width: auto; }

@@ -1,0 +1,297 @@
+---
+const base = import.meta.env.BASE_URL;
+---
+
+<section class="lanyard-section" id="identity" data-lanyard-section>
+  <div class="lanyard-heading">
+    <p class="eyebrow">Identity / Interactive Object</p>
+    <h2>PULL THE<br />PORTRAIT</h2>
+  </div>
+  <div class="lanyard-meta mono">
+    <span>DRAG · RELEASE · SWING</span>
+    <span>THREE.JS / REAL-TIME</span>
+  </div>
+  <div class="lanyard-canvas" data-lanyard-canvas aria-label="可拖拽的三维吊绳个人工牌"></div>
+  <div class="lanyard-fallback" data-lanyard-fallback>
+    <div class="fallback-straps" aria-hidden="true"></div>
+    <div class="fallback-card"><img src={`${base}assets/images/profile-lanyard.jpg`} alt="王馨苑个人照片" /><b>WANG XINYUAN</b><span>DIGITAL MEDIA ART</span></div>
+  </div>
+  <p class="lanyard-instruction mono"><i data-lucide="move"></i><span>HOLD THE BADGE AND MOVE</span></p>
+</section>
+
+<script>
+  import * as THREE from "three";
+  import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeometry.js";
+
+  const section = document.querySelector<HTMLElement>("[data-lanyard-section]");
+  const holder = section?.querySelector<HTMLElement>("[data-lanyard-canvas]");
+  const fallback = section?.querySelector<HTMLElement>("[data-lanyard-fallback]");
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  if (section && holder && fallback && !reduced) {
+    const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true, powerPreference: "high-performance" });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 1.6));
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.05;
+    holder.appendChild(renderer.domElement);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(32, 1, .1, 100);
+    camera.position.set(0, .15, 11.5);
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x6b70a2, 2.25));
+    const key = new THREE.DirectionalLight(0xffffff, 3.2);
+    key.position.set(-4, 5, 7);
+    scene.add(key);
+    const rim = new THREE.PointLight(0x9ba8ff, 8, 16);
+    rim.position.set(4, -1, 5);
+    scene.add(rim);
+
+    const badge = new THREE.Group();
+    badge.position.set(0, 3.5, 0);
+    scene.add(badge);
+
+    const shell = new THREE.Mesh(
+      new RoundedBoxGeometry(2.72, 3.78, .18, 6, .16),
+      new THREE.MeshPhysicalMaterial({ color: 0xf8f9fb, roughness: .2, metalness: .05, clearcoat: 1, clearcoatRoughness: .16 })
+    );
+    badge.add(shell);
+
+    const darkBack = new THREE.Mesh(
+      new RoundedBoxGeometry(2.58, 3.62, .12, 5, .13),
+      new THREE.MeshStandardMaterial({ color: 0x111216, roughness: .5, metalness: .15 })
+    );
+    darkBack.position.z = -.13;
+    badge.add(darkBack);
+
+    const loader = new THREE.TextureLoader();
+    const portrait = loader.load(`${import.meta.env.BASE_URL}assets/images/profile-lanyard.jpg`, () => {
+      portrait.colorSpace = THREE.SRGBColorSpace;
+      portrait.wrapS = portrait.wrapT = THREE.ClampToEdgeWrapping;
+      portrait.repeat.set(1, .78);
+      portrait.offset.set(0, .12);
+      portrait.needsUpdate = true;
+    });
+    const photo = new THREE.Mesh(
+      new THREE.PlaneGeometry(2.38, 2.38),
+      new THREE.MeshBasicMaterial({ map: portrait, toneMapped: false })
+    );
+    photo.position.set(0, .48, .101);
+    badge.add(photo);
+
+    const labelCanvas = document.createElement("canvas");
+    labelCanvas.width = 1024;
+    labelCanvas.height = 420;
+    const context = labelCanvas.getContext("2d")!;
+    context.fillStyle = "#f8f9fb";
+    context.fillRect(0, 0, labelCanvas.width, labelCanvas.height);
+    context.fillStyle = "#111216";
+    context.font = "700 78px Arial";
+    context.fillText("WANG XINYUAN", 58, 125);
+    context.font = "700 29px Arial";
+    context.fillText("DIGITAL MEDIA ART / 2026", 60, 193);
+    context.fillStyle = "#315cff";
+    context.fillRect(58, 254, 190, 18);
+    context.fillStyle = "#ef4f9a";
+    context.fillRect(264, 254, 110, 18);
+    context.fillStyle = "#111216";
+    context.font = "24px Courier New";
+    context.fillText("CHARACTER · WORLD · MOTION · INTERACTION", 58, 338);
+    const labelTexture = new THREE.CanvasTexture(labelCanvas);
+    labelTexture.colorSpace = THREE.SRGBColorSpace;
+    const label = new THREE.Mesh(new THREE.PlaneGeometry(2.42, 1), new THREE.MeshBasicMaterial({ map: labelTexture, toneMapped: false }));
+    label.position.set(0, -1.2, .102);
+    badge.add(label);
+
+    const slot = new THREE.Mesh(
+      new RoundedBoxGeometry(.66, .16, .24, 4, .07),
+      new THREE.MeshStandardMaterial({ color: 0x202126, roughness: .3, metalness: .7 })
+    );
+    slot.position.set(0, 1.72, .04);
+    badge.add(slot);
+    const ringMaterial = new THREE.MeshStandardMaterial({ color: 0xbcc1c9, roughness: .22, metalness: .88 });
+    [-.69, .69].forEach((x) => {
+      const ring = new THREE.Mesh(new THREE.TorusGeometry(.16, .035, 12, 32), ringMaterial);
+      ring.position.set(x, 1.85, 0);
+      badge.add(ring);
+    });
+
+    const strapMaterial = new THREE.MeshPhysicalMaterial({ color: 0x191a20, roughness: .5, metalness: .08, sheen: .45, sheenColor: new THREE.Color(0x7a82aa), side: THREE.DoubleSide });
+    const segments = 40;
+    const createRibbon = () => {
+      const geometry = new THREE.BufferGeometry();
+      geometry.setAttribute("position", new THREE.BufferAttribute(new Float32Array((segments + 1) * 2 * 3), 3));
+      geometry.setAttribute("uv", new THREE.BufferAttribute(new Float32Array((segments + 1) * 2 * 2), 2));
+      const indices: number[] = [];
+      for (let i = 0; i < segments; i++) indices.push(i * 2, i * 2 + 1, i * 2 + 2, i * 2 + 1, i * 2 + 3, i * 2 + 2);
+      geometry.setIndex(indices);
+      const mesh = new THREE.Mesh(geometry, strapMaterial);
+      scene.add(mesh);
+      return mesh;
+    };
+    const leftStrap = createRibbon();
+    const rightStrap = createRibbon();
+    const leftAnchor = new THREE.Vector3(-2.35, 4.4, -.15);
+    const rightAnchor = new THREE.Vector3(2.35, 4.4, -.15);
+    const leftAttach = new THREE.Vector3();
+    const rightAttach = new THREE.Vector3();
+    const curve = new THREE.CatmullRomCurve3([new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()]);
+    const updateRibbon = (mesh: THREE.Mesh, anchor: THREE.Vector3, end: THREE.Vector3, side: number) => {
+      curve.points[0].copy(anchor);
+      curve.points[1].lerpVectors(anchor, end, .28).add(new THREE.Vector3(side * .24, -.08, .08));
+      curve.points[2].lerpVectors(anchor, end, .68).add(new THREE.Vector3(side * .12, -.2, .18));
+      curve.points[3].copy(end);
+      const points = curve.getPoints(segments);
+      const positions = mesh.geometry.getAttribute("position") as THREE.BufferAttribute;
+      const uvs = mesh.geometry.getAttribute("uv") as THREE.BufferAttribute;
+      points.forEach((point, index) => {
+        const previous = points[Math.max(0, index - 1)];
+        const next = points[Math.min(points.length - 1, index + 1)];
+        const tangent = next.clone().sub(previous).normalize();
+        const normal = new THREE.Vector3(-tangent.y, tangent.x, 0).normalize().multiplyScalar(.105);
+        positions.setXYZ(index * 2, point.x - normal.x, point.y - normal.y, point.z - normal.z);
+        positions.setXYZ(index * 2 + 1, point.x + normal.x, point.y + normal.y, point.z + normal.z);
+        uvs.setXY(index * 2, 0, index / segments);
+        uvs.setXY(index * 2 + 1, 1, index / segments);
+      });
+      positions.needsUpdate = true;
+      uvs.needsUpdate = true;
+      mesh.geometry.computeVertexNormals();
+    };
+
+    const raycaster = new THREE.Raycaster();
+    const pointer = new THREE.Vector2();
+    const dragPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+    const worldPoint = new THREE.Vector3();
+    const dragOffset = new THREE.Vector3();
+    const dragTarget = new THREE.Vector3();
+    const velocity = new THREE.Vector3(0, -2.4, 0);
+    const lastTarget = new THREE.Vector3();
+    let dragging = false;
+    let lastPointerTime = performance.now();
+
+    const pointerToWorld = (event: PointerEvent) => {
+      const rect = renderer.domElement.getBoundingClientRect();
+      pointer.set(((event.clientX - rect.left) / rect.width) * 2 - 1, -((event.clientY - rect.top) / rect.height) * 2 + 1);
+      raycaster.setFromCamera(pointer, camera);
+      raycaster.ray.intersectPlane(dragPlane, worldPoint);
+      return worldPoint;
+    };
+    const onPointerDown = (event: PointerEvent) => {
+      pointerToWorld(event);
+      const hit = raycaster.intersectObject(badge, true)[0];
+      if (!hit) return;
+      dragging = true;
+      dragOffset.copy(worldPoint).sub(badge.position);
+      dragTarget.copy(badge.position);
+      lastTarget.copy(dragTarget);
+      lastPointerTime = performance.now();
+      renderer.domElement.setPointerCapture(event.pointerId);
+      renderer.domElement.style.cursor = "grabbing";
+      section.classList.add("is-dragging");
+    };
+    const onPointerMove = (event: PointerEvent) => {
+      pointerToWorld(event);
+      if (!dragging) {
+        renderer.domElement.style.cursor = raycaster.intersectObject(badge, true).length ? "grab" : "default";
+        return;
+      }
+      dragTarget.copy(worldPoint).sub(dragOffset);
+      dragTarget.x = THREE.MathUtils.clamp(dragTarget.x, -3.7, 3.7);
+      dragTarget.y = THREE.MathUtils.clamp(dragTarget.y, -2.55, 1.55);
+      const now = performance.now();
+      const dt = Math.max((now - lastPointerTime) / 1000, .016);
+      velocity.copy(dragTarget).sub(lastTarget).multiplyScalar(.34 / dt);
+      lastTarget.copy(dragTarget);
+      lastPointerTime = now;
+    };
+    const release = (event: PointerEvent) => {
+      if (!dragging) return;
+      dragging = false;
+      renderer.domElement.releasePointerCapture(event.pointerId);
+      renderer.domElement.style.cursor = "grab";
+      section.classList.remove("is-dragging");
+    };
+    renderer.domElement.addEventListener("pointerdown", onPointerDown);
+    renderer.domElement.addEventListener("pointermove", onPointerMove);
+    renderer.domElement.addEventListener("pointerup", release);
+    renderer.domElement.addEventListener("pointercancel", release);
+
+    const rest = new THREE.Vector3(0, -.5, 0);
+    const timer = new THREE.Timer();
+    let frame = 0;
+    const resize = () => {
+      const rect = holder.getBoundingClientRect();
+      renderer.setSize(rect.width, rect.height, false);
+      camera.aspect = rect.width / rect.height;
+      camera.position.z = rect.width < 700 ? 13.8 : 11.5;
+      camera.updateProjectionMatrix();
+    };
+    const render = () => {
+      timer.update();
+      const delta = Math.min(timer.getDelta(), .034);
+      const elapsed = timer.getElapsed();
+      if (dragging) {
+        badge.position.lerp(dragTarget, 1 - Math.pow(.0008, delta));
+      } else {
+        const acceleration = rest.clone().sub(badge.position).multiplyScalar(8.5);
+        acceleration.y -= .8;
+        velocity.addScaledVector(acceleration, delta);
+        velocity.multiplyScalar(Math.pow(.12, delta));
+        badge.position.addScaledVector(velocity, delta);
+      }
+      const tiltZ = THREE.MathUtils.clamp(-velocity.x * .055, -.38, .38);
+      const tiltY = THREE.MathUtils.clamp(velocity.x * .025, -.28, .28);
+      badge.rotation.z = THREE.MathUtils.lerp(badge.rotation.z, tiltZ + Math.sin(elapsed * 1.4) * .012, .09);
+      badge.rotation.y = THREE.MathUtils.lerp(badge.rotation.y, tiltY, .08);
+      badge.rotation.x = THREE.MathUtils.lerp(badge.rotation.x, THREE.MathUtils.clamp(velocity.y * .018, -.16, .14), .08);
+      leftAttach.set(-.69, 1.85, 0).applyMatrix4(badge.matrixWorld);
+      rightAttach.set(.69, 1.85, 0).applyMatrix4(badge.matrixWorld);
+      updateRibbon(leftStrap, leftAnchor, leftAttach, -1);
+      updateRibbon(rightStrap, rightAnchor, rightAttach, 1);
+      renderer.render(scene, camera);
+      if (!fallback.classList.contains("is-hidden")) fallback.classList.add("is-hidden");
+      holder.classList.add("is-ready");
+      frame = requestAnimationFrame(render);
+    };
+    window.addEventListener("resize", resize);
+    resize();
+    render();
+
+    document.addEventListener("astro:before-swap", () => {
+      cancelAnimationFrame(frame);
+      renderer.dispose();
+      portrait.dispose();
+      labelTexture.dispose();
+    }, { once: true });
+  }
+</script>
+
+<style>
+  .lanyard-section { position: relative; height: 105svh; min-height: 760px; overflow: hidden; color: #111216; background: #eef0f4; isolation: isolate; }
+  .lanyard-section::before { content: ""; position: absolute; inset: 0; opacity: .55; background-image: linear-gradient(rgba(17,18,22,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(17,18,22,.08) 1px, transparent 1px); background-size: 72px 72px; mask-image: linear-gradient(90deg, #000, transparent 78%); }
+  .lanyard-heading { position: absolute; z-index: 3; top: 11%; left: var(--pad); pointer-events: none; }
+  .lanyard-heading h2 { margin-top: 16px; font-size: clamp(62px, 9vw, 138px); line-height: .76; }
+  .lanyard-meta { position: absolute; z-index: 4; right: var(--pad); bottom: 36px; left: var(--pad); display: flex; justify-content: space-between; font-size: 9px; pointer-events: none; }
+  .lanyard-canvas, .lanyard-fallback { position: absolute; inset: 0; }
+  .lanyard-canvas { z-index: 2; opacity: 0; transition: opacity .45s; touch-action: none; }
+  .lanyard-canvas.is-ready { opacity: 1; }
+  .lanyard-canvas canvas { width: 100%; height: 100%; }
+  .lanyard-fallback { z-index: 1; display: grid; place-items: center; transition: opacity .35s; }
+  .lanyard-fallback.is-hidden { opacity: 0; pointer-events: none; }
+  .fallback-straps { position: absolute; top: -4%; width: 380px; height: 50%; border-right: 18px solid #1a1b20; border-left: 18px solid #1a1b20; }
+  .fallback-card { width: 270px; padding: 10px 10px 18px; background: white; box-shadow: 0 30px 80px rgba(16,18,30,.16); transform: translateY(90px) rotate(-2deg); }
+  .fallback-card img { width: 100%; aspect-ratio: 1; object-fit: cover; }
+  .fallback-card b, .fallback-card span { display: block; margin: 13px 8px 0; }
+  .fallback-card span { margin-top: 4px; font: 10px "Courier New", monospace; }
+  .lanyard-instruction { position: absolute; z-index: 4; right: var(--pad); top: 13%; display: flex; align-items: center; gap: 8px; font-size: 9px; pointer-events: none; }
+  .lanyard-instruction svg { width: 15px; }
+  .is-dragging .lanyard-instruction { opacity: .25; }
+  @media (max-width: 800px) {
+    .lanyard-section { height: 94svh; min-height: 690px; }
+    .lanyard-heading { top: 12%; }
+    .lanyard-heading h2 { font-size: 54px; }
+    .lanyard-instruction { top: auto; right: auto; bottom: 72px; left: var(--pad); }
+    .lanyard-meta span:last-child { display: none; }
+  }
+</style>
