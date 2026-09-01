@@ -6,8 +6,8 @@ const base = import.meta.env.BASE_URL;
   class="model-stage"
   id="worlds"
   data-model-stage
-  data-model-url={`${base}assets/3d/xi_sikao3.fbx`}
-  data-texture-url={`${base}assets/3d/xi_sikao3-texture.png`}
+  data-model-url={`${base}assets/3d/xilanhua.fbx`}
+  data-texture-url={`${base}assets/3d/xilanhua-texture.png`}
 >
   <div class="model-canvas" data-model-canvas aria-label="可拖拽旋转的 3D 角色模型"></div>
   <img class="model-fallback" src={`${base}assets/elements/nuo-character-01.png`} alt="傩戏角色设计" loading="lazy" data-model-fallback />
@@ -74,9 +74,12 @@ const base = import.meta.env.BASE_URL;
       let mixer: THREE.AnimationMixer | undefined;
       const timer = new THREE.Timer();
       const textureLoader = new THREE.TextureLoader();
-      const texture = textureLoader.load(stage.dataset.textureUrl || "");
-      texture.colorSpace = THREE.SRGBColorSpace;
-      texture.flipY = false;
+      const textureUrl = stage.dataset.textureUrl;
+      const texture = textureUrl ? textureLoader.load(textureUrl) : undefined;
+      if (texture) {
+        texture.colorSpace = THREE.SRGBColorSpace;
+        texture.flipY = false;
+      }
 
       const loader = new FBXLoader();
       loader.load(stage.dataset.modelUrl || "", (object) => {
@@ -84,7 +87,7 @@ const base = import.meta.env.BASE_URL;
           if (child instanceof THREE.Mesh) {
             const materials = Array.isArray(child.material) ? child.material : [child.material];
             materials.forEach((material) => {
-              if (material && "map" in material) {
+              if (material && texture && "map" in material) {
                 material.map = texture;
                 material.roughness = 0.78;
                 material.metalness = 0.05;
@@ -144,7 +147,7 @@ const base = import.meta.env.BASE_URL;
         cancelAnimationFrame(frame);
         renderer.dispose();
         controls.dispose();
-        texture.dispose();
+        texture?.dispose();
       }, { once: true });
     };
     const observer = new IntersectionObserver((entries) => {
