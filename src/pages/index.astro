@@ -7,6 +7,8 @@ import ProfileIntro from "../components/ProfileIntro.astro";
 import FilmSection from "../components/FilmSection.astro";
 import ModelStage from "../components/ModelStage.astro";
 import { journalEntries } from "../data/journal";
+import "../styles/lower-portfolio.css";
+import ArchiveViewer from "../components/ArchiveViewer.astro";
 
 const base = import.meta.env.BASE_URL;
 const selected = [
@@ -87,11 +89,12 @@ const selected = [
       </div>
     </section>
 
-    <section class="experiments dark-band" id="experiments">
+    <section class="experiments dark-band lower-section" id="experiments">
       <div class="section-head">
         <div><p class="eyebrow">Spatial & Experimental Interaction</p><h2>RULES TO<br />WALK THROUGH</h2></div>
         <p class="section-intro">把抽象命题变成身体可以经历的路线、循环和反馈。</p>
       </div>
+      <nav class="archive-nav" aria-label="作品分类"><span>SELECTED EXPLORATIONS / 03</span><a href="#experiments">01 交互空间</a><a href="#stories">02 叙事影像</a><a href="#commercial">03 实践设计</a></nav>
       <article class="mogule-feature" data-mogule-feature>
         <div class="mogule-stage">
           <div class="mogule-tiles" aria-hidden="true">{Array.from({ length: 12 }).map((_, index) => <span style={`--tile:${index}`}></span>)}</div>
@@ -135,7 +138,7 @@ const selected = [
           </section>
         </div>
       </dialog>
-      <article class="experiment-feature reverse">
+      <article class="experiment-feature reverse" data-reveal>
         <div class="goose-composition" data-parallax-scene>
           <img class="goose-postcard" src={`${base}assets/elements/goose-postcard.png`} alt="校园明信片" loading="lazy" />
           <img class="goose g1" src={`${base}assets/elements/goose-player.png`} alt="玩家雁角色" loading="lazy" />
@@ -143,39 +146,39 @@ const selected = [
           <img class="goose g3" src={`${base}assets/elements/goose-electronic.png`} alt="电子雁角色" loading="lazy" />
           <img class="goose g4" src={`${base}assets/elements/goose-security.png`} alt="网安雁角色" loading="lazy" />
         </div>
-        <div class="experiment-copy"><span class="mono">GAME · INTERACTION</span><h3>POST GOOSE</h3><p>以游戏机制组织视觉叙事，让动作、规则和反馈成为项目表达的一部分。</p></div>
+        <div class="experiment-copy"><span class="project-number">02 / PLAY</span><span class="mono">GAME · INTERACTION</span><h3>POST<br />GOOSE</h3><p>以游戏机制组织视觉叙事，让动作、规则和反馈成为项目表达的一部分。</p><span class="project-tag">角色 / 校园 / 游戏机制</span></div>
       </article>
     </section>
 
-    <section class="stories light-band" id="stories">
+    <section class="stories light-band lower-section" id="stories">
       <div class="section-head compact-head">
         <div><p class="eyebrow">Stories & Characters</p><h2>DRAWN,<br />THEN MOVING</h2></div>
         <p class="section-intro">分镜、漫画、角色与 AIGC 动画实验，共同记录人物被创造出来的过程。</p>
       </div>
       <div class="story-grid">
-        <figure class="story-large lantern-composition">
+        <figure class="story-large lantern-composition" data-gallery="花灯缘">
           <img class="lantern-title" src={`${base}assets/elements/lantern-title.png`} alt="花灯缘" loading="lazy" />
           <img class="lantern-person" src={`${base}assets/elements/lantern-character.png`} alt="花灯缘角色" loading="lazy" />
           <img class="lantern-door" src={`${base}assets/elements/lantern-xiaoyuan-door.png`} alt="小元进家门" loading="lazy" />
-          <figcaption><b>花灯缘</b><span>AIGC-assisted Animation</span></figcaption>
+          <figcaption><div><span>01 / AIGC ANIMATION</span><b>花灯缘</b></div><button type="button" data-gallery-open aria-label="查看花灯缘图集"><i data-lucide="arrow-up-right"></i></button></figcaption>
         </figure>
-        <figure class="lantern-frames"><div><img src={`${base}assets/elements/lantern-shot-look.png`} alt="花灯缘镜头一" loading="lazy" /><img src={`${base}assets/elements/lantern-shot-fish.png`} alt="花灯缘镜头二" loading="lazy" /><img src={`${base}assets/elements/lantern-shot-sky.png`} alt="花灯缘镜头三" loading="lazy" /></div><figcaption><b>Light & Shots</b><span>Visual Storytelling</span></figcaption></figure>
-        <figure class="comic-stack"><div><img src={`${base}assets/elements/comic-cover.png`} alt="倒转漫画封面" loading="lazy" /><img src={`${base}assets/elements/comic-page-01.png`} alt="倒转漫画第一页" loading="lazy" /><img src={`${base}assets/elements/comic-page-02.png`} alt="倒转漫画第二页" loading="lazy" /></div><figcaption><b>倒转</b><span>Personal Comic</span></figcaption></figure>
+        <figure class="lantern-frames" data-gallery="花灯缘 · 分镜"><div><img src={`${base}assets/elements/lantern-shot-look.png`} alt="花灯缘镜头一" loading="lazy" /><img src={`${base}assets/elements/lantern-shot-fish.png`} alt="花灯缘镜头二" loading="lazy" /><img src={`${base}assets/elements/lantern-shot-sky.png`} alt="花灯缘镜头三" loading="lazy" /></div><figcaption><div><span>02 / VISUAL STORYTELLING</span><b>Light & Shots</b></div><button type="button" data-gallery-open aria-label="查看分镜图集"><i data-lucide="arrow-up-right"></i></button></figcaption></figure>
+        <figure class="comic-stack" data-gallery="倒转 · 漫画"><div><img src={`${base}assets/elements/comic-cover.png`} alt="倒转漫画封面" loading="lazy" /><img src={`${base}assets/elements/comic-page-01.png`} alt="倒转漫画第一页" loading="lazy" /><img src={`${base}assets/elements/comic-page-02.png`} alt="倒转漫画第二页" loading="lazy" /></div><figcaption><div><span>03 / PERSONAL COMIC</span><b>倒转</b></div><button type="button" data-gallery-open aria-label="查看倒转漫画"><i data-lucide="arrow-up-right"></i></button></figcaption></figure>
       </div>
     </section>
 
-    <section class="commercial grid-surface" id="commercial">
+    <section class="commercial lower-section" id="commercial">
       <div class="commercial-title"><p class="eyebrow">Commercial / Internship</p><h2>REAL BRIEFS.<br />REAL DELIVERY.</h2></div>
       <div class="commercial-list">
-        <article><span class="mono">01</span><h3>Sohu New Media</h3><p>赛事宣传、采访、短视频与平面视觉</p><div class="poster-pair"><img src={`${base}assets/elements/internship-poster-01.png`} alt="搜狐实习海报一" loading="lazy" /><img src={`${base}assets/elements/internship-poster-02.png`} alt="搜狐实习海报二" loading="lazy" /></div></article>
-        <article><span class="mono">02</span><h3>Campaign Objects</h3><p>从视觉系统中拆出的线下媒介与活动物料</p><img src={`${base}assets/elements/internship-sign.png`} alt="活动麦牌设计" loading="lazy" /></article>
+        <article data-reveal data-gallery="Sohu New Media"><span class="mono">01</span><h3>Sohu New Media</h3><p>赛事宣传、采访、短视频与平面视觉</p><div class="poster-pair"><img src={`${base}assets/elements/internship-poster-01.png`} alt="搜狐实习海报一" loading="lazy" /><img src={`${base}assets/elements/internship-poster-02.png`} alt="搜狐实习海报二" loading="lazy" /></div><button class="archive-open" type="button" data-gallery-open>查看作品 <i data-lucide="arrow-up-right"></i></button></article>
+        <article data-reveal data-gallery="Campaign Objects"><span class="mono">02</span><h3>Campaign Objects</h3><p>从视觉系统中拆出的线下媒介与活动物料</p><img src={`${base}assets/elements/internship-sign.png`} alt="活动麦牌设计" loading="lazy" /><button class="archive-open" type="button" data-gallery-open>查看作品 <i data-lucide="arrow-up-right"></i></button></article>
       </div>
     </section>
 
-    <section class="journal-preview dark-band">
+    <section class="journal-preview lower-section" id="notes">
       <div class="section-head compact-head">
         <div><p class="eyebrow">Personal Journal</p><h2>NOTES FROM<br />THE PROCESS</h2></div>
-        <a class="text-button light" href={`${base}journal/`}><span>Open Journal</span><i data-lucide="arrow-up-right"></i></a>
+        <a class="text-button" href={`${base}journal/`}><span>Open Journal</span><i data-lucide="arrow-up-right"></i></a>
       </div>
       <div class="journal-rows">
         {journalEntries.map((entry) => (
@@ -186,12 +189,15 @@ const selected = [
       </div>
     </section>
 
-    <section class="about light-band" id="about">
-      <div class="about-index mono">ABOUT · CONTACT</div>
-      <div class="about-copy"><h2>WANG<br />XINYUAN</h2><p>数字媒体艺术设计师。以角色为线索，在 3D、动画、交互和游戏之间搭建可以被观看，也可以被进入的叙事空间。</p></div>
-      <div class="about-meta"><div><span>Focus</span><p>Character / World / Motion / Interaction</p></div><div><span>Tools</span><p>Blender / C4D / Unity / Adobe CC / AIGC</p></div><div><span>Contact</span><p>请在发布前填写邮箱与社交账号</p></div></div>
+    <section class="about lower-section" id="about">
+      <div class="about-index mono">LET'S MAKE SOMETHING / 联系我</div>
+      <div class="about-copy" data-reveal><h2>LET’S<br />CREATE.</h2><p>王馨苑 / 数字媒体艺术<br />从一个想法，到一个可以被进入的世界。</p></div>
+      <div class="contact-lines"><a href="mailto:buchifanqieqieqie@outlook.com"><span>EMAIL</span><strong>buchifanqieqieqie<wbr />@outlook.com</strong><i data-lucide="arrow-up-right"></i></a><button type="button" data-copy-wechat><span>WECHAT / 微信</span><strong>15974210370</strong><i data-lucide="copy"></i></button></div>
+      <div class="about-meta"><div><span>Focus</span><p>Character / World / Motion / Interaction</p></div><div><span>Tools</span><p>Blender / C4D / Unity / Adobe CC / AIGC</p></div></div>
       <footer><span>© 2026 Wang Xinyuan</span><a href="#">Back to top <i data-lucide="arrow-up-right"></i></a></footer>
     </section>
+    <ArchiveViewer />
+    <p class="contact-toast" role="status" aria-live="polite" data-copy-status></p>
   </main>
 
   <script>
@@ -199,16 +205,32 @@ const selected = [
     import { ScrollTrigger } from "gsap/ScrollTrigger";
     gsap.registerPlugin(ScrollTrigger);
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    document.addEventListener("portfolio:layout-change", () => requestAnimationFrame(() => ScrollTrigger.refresh()));
+    const copyStatus = document.querySelector<HTMLElement>("[data-copy-status]");
+    let toastTimer = 0;
+    document.querySelectorAll<HTMLButtonElement>("[data-copy-wechat]").forEach(button => button.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText("15974210370");
+        if (copyStatus) copyStatus.textContent = "微信号已复制：15974210370";
+      } catch {
+        if (copyStatus) copyStatus.textContent = "微信号：15974210370（可在页尾选择复制）";
+      }
+      copyStatus?.classList.add("is-visible");
+      clearTimeout(toastTimer);
+      toastTimer = window.setTimeout(() => copyStatus?.classList.remove("is-visible"), 3500);
+    }));
 
     if (!reduced) {
+      gsap.from(".contact-bubble", { scale: .65, y: 26, opacity: 0, duration: .8, stagger: .18, ease: "back.out(1.4)", scrollTrigger: { trigger: "#identity", start: "top 55%", once: true } });
+      gsap.utils.toArray<HTMLElement>("[data-reveal], .journal-rows a").forEach(item => gsap.from(item, { y: 36, opacity: 0, duration: .85, ease: "power3.out", scrollTrigger: { trigger: item, start: "top 91%", once: true } }));
       gsap.utils.toArray<HTMLElement>(".work-row").forEach((row) => {
         gsap.from(row, { y: 70, opacity: 0, duration: 0.9, ease: "power3.out", scrollTrigger: { trigger: row, start: "top 84%" } });
       });
       gsap.utils.toArray<HTMLElement>(".section-head h2, .manifesto h2").forEach((heading) => {
         gsap.from(heading, { yPercent: 18, opacity: 0, duration: 1, ease: "power3.out", scrollTrigger: { trigger: heading, start: "top 86%" } });
       });
-      gsap.utils.toArray<HTMLElement>(".experiment-feature, .story-grid figure").forEach((item) => {
-        gsap.from(item, { clipPath: "inset(0 0 100% 0)", duration: 1.05, ease: "power3.inOut", scrollTrigger: { trigger: item, start: "top 82%" } });
+      gsap.utils.toArray<HTMLElement>(".story-grid figure").forEach((item) => {
+        gsap.from(item, { y: 44, opacity: 0, duration: .9, ease: "power3.out", scrollTrigger: { trigger: item, start: "top 88%", once: true } });
       });
       document.querySelectorAll<HTMLElement>("[data-parallax-scene]").forEach((scene) => {
         scene.addEventListener("pointermove", (event) => {
@@ -217,6 +239,7 @@ const selected = [
           const y = (event.clientY - rect.top) / rect.height - .5;
           gsap.to(scene.querySelectorAll("img:not(:first-child)"), { x: (i) => x * (i + 1) * 14, y: (i) => y * (i + 1) * 10, duration: .6, ease: "power2.out" });
         });
+        scene.addEventListener("pointerleave", () => gsap.to(scene.querySelectorAll("img:not(:first-child)"), { x: 0, y: 0, duration: .65, ease: "power3.out" }));
       });
 
       const mogule = document.querySelector<HTMLElement>("[data-mogule-feature]");

@@ -2,7 +2,8 @@
 const base = import.meta.env.BASE_URL;
 ---
 
-<section id="profile-intro" class="profile-intro" aria-label="王馨苑个人简介">
+<section id="profile-intro" class="profile-intro" aria-label="王馨苑个人简介" hidden>
+  <button class="profile-collapse" type="button" aria-label="收起个人简介"><i data-lucide="chevron-up"></i> 收起简介</button>
   <button class="profile-art" data-profile-open aria-label="放大查看王馨苑个人简介">
     <img src={`${base}assets/images/about-profile.png`} alt="王馨苑 ABOUT ME：北京邮电大学数字媒体艺术专业，获奖经历、实践经历、个人介绍与创作工具" loading="lazy" />
     <span class="expand"><i data-lucide="maximize-2"></i></span>
@@ -25,23 +26,37 @@ const base = import.meta.env.BASE_URL;
   const section = document.querySelector<HTMLElement>(".profile-intro");
   const dialog = document.querySelector<HTMLDialogElement>(".profile-dialog");
   const trigger = section?.querySelector<HTMLButtonElement>("[data-profile-open]");
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const reveal = () => {
+    if (!section) return;
+    const wasHidden = section.hidden;
+    section.hidden = false;
+    document.querySelectorAll("[data-profile-reveal]").forEach(button => button.setAttribute("aria-expanded", "true"));
+    if (wasHidden && !reduced) section.animate([{ opacity: 0, transform: "translateY(-20px)" }, { opacity: 1, transform: "translateY(0)" }], { duration: 650, easing: "cubic-bezier(.22,1,.36,1)" });
+    document.dispatchEvent(new CustomEvent("portfolio:layout-change"));
+    requestAnimationFrame(() => section.scrollIntoView({ behavior: reduced ? "instant" : "smooth", block: "start" }));
+  };
+  document.addEventListener("portfolio:reveal-profile", reveal);
+  document.querySelectorAll("[data-profile-reveal]").forEach(button => button.addEventListener("click", reveal));
+  section?.querySelector(".profile-collapse")?.addEventListener("click", () => {
+    section.hidden = true;
+    const button = document.querySelector<HTMLButtonElement>("[data-profile-reveal]");
+    button?.setAttribute("aria-expanded", "false");
+    document.dispatchEvent(new CustomEvent("portfolio:layout-change"));
+    document.getElementById("identity")?.scrollIntoView({ behavior: "instant" });
+    button?.focus({ preventScroll: true });
+  });
   trigger?.addEventListener("click", () => dialog?.showModal());
   dialog?.querySelector(".profile-close")?.addEventListener("click", () => dialog.close());
   dialog?.addEventListener("click", (event) => { if (event.target === dialog) dialog.close(); });
   dialog?.addEventListener("close", () => trigger?.focus({ preventScroll: true }));
-  if (section && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    const observer = new IntersectionObserver(([entry]) => {
-      if (entry.isIntersecting) {
-        section.animate([{ opacity: .25, transform: "translateY(32px)" }, { opacity: 1, transform: "translateY(0)" }], { duration: 700, easing: "cubic-bezier(.22,1,.36,1)" });
-        observer.disconnect();
-      }
-    }, { threshold: .12 });
-    observer.observe(section);
-    document.addEventListener("astro:before-swap", () => observer.disconnect(), { once: true });
-  }
+  document.addEventListener("astro:before-swap", () => document.removeEventListener("portfolio:reveal-profile", reveal), { once: true });
 </script>
 
 <style>
+  .profile-intro[hidden] { display: none; }
+  .profile-collapse { display: flex; align-items: center; gap: 8px; margin: 0 0 20px auto; padding: 10px 12px; min-height: 44px; border: 0; background: transparent; cursor: pointer; font-size: 13px; }
+  .profile-collapse svg { width: 18px; }
   .profile-intro { padding: 96px var(--pad) 40px; background: #fff; scroll-margin-top: 76px; }
   .profile-art { position: relative; display: block; width: 100%; max-width: 1680px; margin: auto; padding: 0; border: 0; background: transparent; cursor: zoom-in; }
   .profile-art img { width: 100%; height: auto; aspect-ratio: 1671 / 941; object-fit: contain; }

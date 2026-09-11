@@ -4,20 +4,26 @@ const base = import.meta.env.BASE_URL;
 
 <section class="lanyard-section" id="identity" data-lanyard-section>
   <div class="lanyard-heading">
-    <p class="eyebrow">Identity / Interactive Object</p>
-    <h2>PULL THE<br />PORTRAIT</h2>
+    <p class="eyebrow">认识一下 / ABOUT ME</p>
+    <h2>向下拉动<br />认识我</h2>
   </div>
   <div class="lanyard-meta mono">
-    <span>DRAG · RELEASE · SWING</span>
-    <span>THREE.JS / REAL-TIME</span>
+    <span>王馨苑 · 数字媒体艺术</span>
+    <span>CHARACTER / WORLD / MOTION</span>
   </div>
   <div class="lanyard-canvas" data-lanyard-canvas aria-label="可拖拽的三维吊绳个人工牌"></div>
   <div class="lanyard-fallback" data-lanyard-fallback>
     <div class="fallback-straps" aria-hidden="true"></div>
     <div class="fallback-card"><img src={`${base}assets/images/profile-lanyard-2026.jpg`} alt="王馨苑个人照片" /><b>WANG XINYUAN</b><span>DIGITAL MEDIA ART</span></div>
   </div>
-  <p class="lanyard-instruction mono"><i data-lucide="move"></i><span>HOLD THE BADGE AND MOVE</span></p>
-  <a class="profile-link" href="#profile-intro">ABOUT ME <i data-lucide="arrow-down"></i></a>
+  <p class="lanyard-instruction"><i data-lucide="move"></i><span>向下拉动工牌，松手展开个人简介</span></p>
+  <button class="profile-link" type="button" data-profile-reveal aria-controls="profile-intro" aria-expanded="false">展开个人简介 <i data-lucide="arrow-down"></i></button>
+  <button class="contact-bubble bubble-wechat" type="button" data-copy-wechat aria-label="复制微信号 15974210370">
+    <span class="bubble-crop"><img src={`${base}assets/images/contact-bubbles.png`} alt="微信：15974210370" /></span>
+  </button>
+  <a class="contact-bubble bubble-email" href="mailto:buchifanqieqieqie@outlook.com" aria-label="发送邮件到 buchifanqieqieqie@outlook.com">
+    <span class="bubble-crop"><img src={`${base}assets/images/contact-bubbles.png`} alt="邮箱：buchifanqieqieqie@outlook.com" /></span>
+  </a>
 </section>
 
 <script>
@@ -218,7 +224,7 @@ const base = import.meta.env.BASE_URL;
       renderer.domElement.style.cursor = "grab";
       section.classList.remove("is-dragging");
       if (event.type === "pointerup" && event.clientY - pointerStartY > 100) {
-        document.getElementById("profile-intro")?.scrollIntoView({ behavior: reduced ? "instant" : "smooth", block: "start" });
+        document.dispatchEvent(new CustomEvent("portfolio:reveal-profile"));
       }
     };
     renderer.domElement.addEventListener("pointerdown", onPointerDown);
@@ -278,12 +284,13 @@ const base = import.meta.env.BASE_URL;
 
 <style>
   .profile-link { position: absolute; z-index: 5; bottom: 64px; right: var(--pad); display: inline-flex; align-items: center; gap: 12px; min-height: 44px; padding: 0 12px; font-size: 13px; font-weight: 700; }
+  .profile-link { border: 0; background: transparent; cursor: pointer; }
   .profile-link svg { width: 18px; }
   .profile-link:focus-visible { outline: 2px solid #005cff; outline-offset: 4px; }
   .lanyard-section { position: relative; height: 105svh; min-height: 760px; overflow: hidden; color: #111216; background: #eef0f4; isolation: isolate; }
   .lanyard-section::before { content: ""; position: absolute; inset: 0; opacity: .55; background-image: linear-gradient(rgba(17,18,22,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(17,18,22,.08) 1px, transparent 1px); background-size: 72px 72px; mask-image: linear-gradient(90deg, #000, transparent 78%); }
   .lanyard-heading { position: absolute; z-index: 3; top: 11%; left: var(--pad); pointer-events: none; }
-  .lanyard-heading h2 { margin-top: 16px; font-size: clamp(62px, 9vw, 138px); line-height: .76; }
+  .lanyard-heading h2 { margin-top: 16px; font-size: 60px; line-height: .94; }
   .lanyard-meta { position: absolute; z-index: 4; right: var(--pad); bottom: 36px; left: var(--pad); display: flex; justify-content: space-between; font-size: 9px; pointer-events: none; }
   .lanyard-canvas, .lanyard-fallback { position: absolute; inset: 0; }
   .lanyard-canvas { z-index: 2; opacity: 0; transition: opacity .45s; touch-action: none; }
@@ -296,14 +303,31 @@ const base = import.meta.env.BASE_URL;
   .fallback-card img { width: 100%; aspect-ratio: 1; object-fit: cover; }
   .fallback-card b, .fallback-card span { display: block; margin: 13px 8px 0; }
   .fallback-card span { margin-top: 4px; font: 10px "Courier New", monospace; }
-  .lanyard-instruction { position: absolute; z-index: 4; right: var(--pad); top: 13%; display: flex; align-items: center; gap: 8px; font-size: 9px; pointer-events: none; }
+  .lanyard-instruction { position: absolute; z-index: 4; right: var(--pad); top: 13%; display: flex; align-items: center; gap: 8px; max-width: calc(100% - 40px); font-size: 14px; line-height: 1.6; pointer-events: none; }
   .lanyard-instruction svg { width: 15px; }
   .is-dragging .lanyard-instruction { opacity: .25; }
+  .lanyard-section { background: #fff; }
+  .contact-bubble { position: absolute; z-index: 5; border: 0; padding: 0; background: transparent; cursor: pointer; transform-origin: bottom center; transition: transform .25s; }
+  .contact-bubble:hover { transform: translateY(-5px) rotate(-2deg); }
+  .contact-bubble:focus-visible { outline: 3px solid #005cff; outline-offset: 5px; }
+  .bubble-crop { display: block; position: relative; overflow: hidden; }
+  .bubble-crop img { position: absolute; max-width: none; height: auto; pointer-events: none; }
+  .bubble-wechat { left: 2.5%; top: 47%; width: 28%; }
+  .bubble-wechat .bubble-crop { aspect-ratio: 760 / 415; }
+  .bubble-wechat img { width: 285.8%; left: -7.9%; top: -39%; }
+  .bubble-email { right: 1.8%; top: 35%; width: 33%; }
+  .bubble-email .bubble-crop { aspect-ratio: 1230 / 415; }
+  .bubble-email img { width: 176.6%; left: -72.1%; top: -38.3%; }
+  @media (prefers-reduced-motion: reduce) { .contact-bubble { transition: none; } }
   @media (max-width: 800px) {
-    .lanyard-section { height: 94svh; min-height: 690px; }
+    .lanyard-section { height: 105svh; min-height: 850px; }
     .lanyard-heading { top: 12%; }
-    .lanyard-heading h2 { font-size: 54px; }
-    .lanyard-instruction { top: auto; right: auto; bottom: 72px; left: var(--pad); }
+    .lanyard-heading { top: 9%; }
+    .lanyard-heading h2 { font-size: 36px; }
+    .lanyard-heading .eyebrow { font-size: 10px; }
+    .bubble-wechat { width: 44%; top: 23%; left: 3%; }
+    .bubble-email { width: 76%; top: auto; bottom: 12%; right: 2%; }
+    .lanyard-instruction { top: 21%; right: 20px; bottom: auto; left: 20px; font-size: 13px; }
     .lanyard-meta span:last-child { display: none; }
   }
 </style>

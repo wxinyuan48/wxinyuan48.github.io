@@ -1,0 +1,59 @@
+<dialog class="archive-viewer" aria-label="作品图集">
+  <header><h2 data-gallery-title></h2><button type="button" data-gallery-close aria-label="关闭图集"><i data-lucide="x"></i></button></header>
+  <div class="archive-image"><img data-gallery-image alt="" /></div>
+  <footer><button type="button" data-gallery-prev aria-label="上一张"><i data-lucide="arrow-left"></i></button><p data-gallery-count aria-live="polite"></p><button type="button" data-gallery-next aria-label="下一张"><i data-lucide="arrow-right"></i></button></footer>
+</dialog>
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>(".archive-viewer");
+  const image = dialog?.querySelector<HTMLImageElement>("[data-gallery-image]");
+  const count = dialog?.querySelector<HTMLElement>("[data-gallery-count]");
+  const title = dialog?.querySelector<HTMLElement>("[data-gallery-title]");
+  const prev = dialog?.querySelector<HTMLButtonElement>("[data-gallery-prev]");
+  const next = dialog?.querySelector<HTMLButtonElement>("[data-gallery-next]");
+  let items: HTMLImageElement[] = [];
+  let active = 0;
+  let source: HTMLButtonElement | null = null;
+  const show = (index: number) => {
+    if (!image || !items.length) return;
+    active = (index + items.length) % items.length;
+    image.src = items[active].src;
+    image.alt = items[active].alt;
+    if (count) count.textContent = `${active + 1} / ${items.length} · ${image.alt}`;
+    if (prev) prev.disabled = items.length < 2;
+    if (next) next.disabled = items.length < 2;
+    if (!matchMedia("(prefers-reduced-motion: reduce)").matches) image.animate([{opacity:.35,transform:"translateY(10px)"},{opacity:1,transform:"translateY(0)"}],{duration:260,easing:"ease-out"});
+  };
+  document.querySelectorAll<HTMLButtonElement>("[data-gallery-open]").forEach(button => button.addEventListener("click", () => {
+    const group = button.closest<HTMLElement>("[data-gallery]");
+    items = Array.from(group?.querySelectorAll<HTMLImageElement>("img") || []);
+    if (!items.length) return;
+    source = button;
+    if (title) title.textContent = group?.dataset.gallery || "作品图集";
+    show(0);
+    dialog?.showModal();
+  }));
+  prev?.addEventListener("click", () => show(active - 1));
+  next?.addEventListener("click", () => show(active + 1));
+  dialog?.querySelector("[data-gallery-close]")?.addEventListener("click", () => dialog.close());
+  dialog?.addEventListener("click", e => { if (e.target === dialog) dialog.close(); });
+  dialog?.addEventListener("keydown", e => {
+    if (e.key === "ArrowLeft" || e.key === "ArrowRight") { e.preventDefault(); show(active + (e.key === "ArrowLeft" ? -1 : 1)); }
+  });
+  dialog?.addEventListener("close", () => source?.focus({preventScroll:true}));
+</script>
+<style>
+  .archive-viewer { position: fixed; inset: 0; margin: auto; padding: 0; width: min(1360px,96vw); height: 92svh; max-height: 100%; border: 0; border-radius: 6px; color: #fff; background: #141518; }
+  .archive-viewer[open] { display: grid; grid-template-rows: 64px minmax(0,1fr) 72px; }
+  .archive-viewer::backdrop { background: #000b; backdrop-filter: blur(14px); }
+  header, footer { display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; gap: 18px; }
+  header { border-bottom: 1px solid #ffffff26; }
+  header h2 { font-size: 18px; }
+  footer { justify-content: center; }
+  footer p { min-width: 110px; text-align: center; font-size: 13px; }
+  button { width: 44px; height: 44px; flex-shrink: 0; display: grid; place-items: center; border: 1px solid #ffffff55; border-radius: 50%; color: white; background: transparent; cursor: pointer; }
+  button:disabled { opacity: .25; cursor: default; }
+  button:focus-visible { outline: 3px solid #cefa53; outline-offset: 3px; }
+  button svg { width: 20px; }
+  .archive-image { padding: 18px; min-height: 0; }
+  .archive-image img { width: 100%; height: 100%; object-fit: contain; }
+</style>
