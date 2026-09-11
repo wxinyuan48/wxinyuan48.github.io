@@ -14,9 +14,10 @@ const base = import.meta.env.BASE_URL;
   <div class="lanyard-canvas" data-lanyard-canvas aria-label="可拖拽的三维吊绳个人工牌"></div>
   <div class="lanyard-fallback" data-lanyard-fallback>
     <div class="fallback-straps" aria-hidden="true"></div>
-    <div class="fallback-card"><img src={`${base}assets/images/profile-lanyard.jpg`} alt="王馨苑个人照片" /><b>WANG XINYUAN</b><span>DIGITAL MEDIA ART</span></div>
+    <div class="fallback-card"><img src={`${base}assets/images/profile-lanyard-2026.jpg`} alt="王馨苑个人照片" /><b>WANG XINYUAN</b><span>DIGITAL MEDIA ART</span></div>
   </div>
   <p class="lanyard-instruction mono"><i data-lucide="move"></i><span>HOLD THE BADGE AND MOVE</span></p>
+  <a class="profile-link" href="#profile-intro">ABOUT ME <i data-lucide="arrow-down"></i></a>
 </section>
 
 <script>
@@ -65,11 +66,14 @@ const base = import.meta.env.BASE_URL;
     badge.add(darkBack);
 
     const loader = new THREE.TextureLoader();
-    const portrait = loader.load(`${import.meta.env.BASE_URL}assets/images/profile-lanyard.jpg`, () => {
+    const portrait = loader.load(`${import.meta.env.BASE_URL}assets/images/profile-lanyard-2026.jpg`, () => {
       portrait.colorSpace = THREE.SRGBColorSpace;
       portrait.wrapS = portrait.wrapT = THREE.ClampToEdgeWrapping;
-      portrait.repeat.set(1, .78);
-      portrait.offset.set(0, .12);
+      const image = portrait.image as HTMLImageElement;
+      const aspect = image.naturalWidth / image.naturalHeight;
+      // Cover the square photo plane with an undistorted crop of the original.
+      portrait.repeat.set(Math.min(1, 1 / aspect), Math.min(1, aspect));
+      portrait.offset.set((1 - portrait.repeat.x) / 2, (1 - portrait.repeat.y) / 2);
       portrait.needsUpdate = true;
     });
     const photo = new THREE.Mesh(
@@ -168,6 +172,7 @@ const base = import.meta.env.BASE_URL;
     const velocity = new THREE.Vector3(0, -2.4, 0);
     const lastTarget = new THREE.Vector3();
     let dragging = false;
+    let pointerStartY = 0;
     let lastPointerTime = performance.now();
 
     const pointerToWorld = (event: PointerEvent) => {
@@ -182,6 +187,7 @@ const base = import.meta.env.BASE_URL;
       const hit = raycaster.intersectObject(badge, true)[0];
       if (!hit) return;
       dragging = true;
+      pointerStartY = event.clientY;
       dragOffset.copy(worldPoint).sub(badge.position);
       dragTarget.copy(badge.position);
       lastTarget.copy(dragTarget);
@@ -211,6 +217,9 @@ const base = import.meta.env.BASE_URL;
       renderer.domElement.releasePointerCapture(event.pointerId);
       renderer.domElement.style.cursor = "grab";
       section.classList.remove("is-dragging");
+      if (event.type === "pointerup" && event.clientY - pointerStartY > 100) {
+        document.getElementById("profile-intro")?.scrollIntoView({ behavior: reduced ? "instant" : "smooth", block: "start" });
+      }
     };
     renderer.domElement.addEventListener("pointerdown", onPointerDown);
     renderer.domElement.addEventListener("pointermove", onPointerMove);
@@ -268,6 +277,9 @@ const base = import.meta.env.BASE_URL;
 </script>
 
 <style>
+  .profile-link { position: absolute; z-index: 5; bottom: 64px; right: var(--pad); display: inline-flex; align-items: center; gap: 12px; min-height: 44px; padding: 0 12px; font-size: 13px; font-weight: 700; }
+  .profile-link svg { width: 18px; }
+  .profile-link:focus-visible { outline: 2px solid #005cff; outline-offset: 4px; }
   .lanyard-section { position: relative; height: 105svh; min-height: 760px; overflow: hidden; color: #111216; background: #eef0f4; isolation: isolate; }
   .lanyard-section::before { content: ""; position: absolute; inset: 0; opacity: .55; background-image: linear-gradient(rgba(17,18,22,.08) 1px, transparent 1px), linear-gradient(90deg, rgba(17,18,22,.08) 1px, transparent 1px); background-size: 72px 72px; mask-image: linear-gradient(90deg, #000, transparent 78%); }
   .lanyard-heading { position: absolute; z-index: 3; top: 11%; left: var(--pad); pointer-events: none; }
