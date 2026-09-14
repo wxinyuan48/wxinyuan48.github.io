@@ -1,0 +1,157 @@
+---
+const base = import.meta.env.BASE_URL;
+const pages = [
+  { src: `${base}assets/comics/daozhuan/cover.jpg`, label: "封面" },
+  ...Array.from({ length: 11 }, (_, i) => ({ src: `${base}assets/comics/daozhuan/page-${String(i + 1).padStart(2, "0")}.jpg`, label: `第 ${i + 1} 页` })),
+];
+---
+
+<dialog class="comic-reader" aria-labelledby="comic-title" data-pages={JSON.stringify(pages)}>
+  <header>
+    <h2 id="comic-title">倒转 <span>王馨苑 · 漫画</span></h2>
+    <div class="reader-tools">
+      <button type="button" data-comic-zoom aria-label="放大查看" title="放大查看" aria-pressed="false"><i data-lucide="maximize-2"></i></button>
+      <button type="button" data-comic-close aria-label="关闭漫画" title="关闭漫画"><i data-lucide="x"></i></button>
+    </div>
+  </header>
+  <div class="comic-viewport" tabindex="0" aria-label="漫画画面">
+    <img data-comic-image alt="" draggable="false" />
+    <div class="reader-status" role="status" hidden><p data-comic-message></p><button type="button" data-comic-retry hidden aria-label="重新加载本页" title="重新加载本页"><i data-lucide="rotate-3d"></i></button></div>
+  </div>
+  <footer>
+    <button type="button" data-comic-prev aria-label="上一页" title="上一页"><i data-lucide="arrow-left"></i></button>
+    <div class="page-control"><select data-comic-select aria-label="选择漫画页码">{pages.map((page, i) => <option value={i}>{page.label}</option>)}</select><span data-comic-count aria-live="polite"></span></div>
+    <button type="button" data-comic-next aria-label="下一页" title="下一页"><i data-lucide="arrow-right"></i></button>
+  </footer>
+</dialog>
+
+<script>
+  const reader = document.querySelector<HTMLDialogElement>(".comic-reader")!;
+  const pages: { src: string; label: string }[] = JSON.parse(reader.dataset.pages!);
+  const image = reader.querySelector<HTMLImageElement>("[data-comic-image]")!;
+  const viewport = reader.querySelector<HTMLElement>(".comic-viewport")!;
+  const status = reader.querySelector<HTMLElement>(".reader-status")!;
+  const message = reader.querySelector<HTMLElement>("[data-comic-message]")!;
+  const retry = reader.querySelector<HTMLButtonElement>("[data-comic-retry]")!;
+  const prev = reader.querySelector<HTMLButtonElement>("[data-comic-prev]")!;
+  const next = reader.querySelector<HTMLButtonElement>("[data-comic-next]")!;
+  const select = reader.querySelector<HTMLSelectElement>("[data-comic-select]")!;
+  const count = reader.querySelector<HTMLElement>("[data-comic-count]")!;
+  const zoom = reader.querySelector<HTMLButtonElement>("[data-comic-zoom]")!;
+  let active = 0;
+  let request = 0;
+  let source: HTMLElement | null = null;
+  let previousOverflow = "";
+  let touch: { x: number; y: number } | null = null;
+
+  const show = async (index: number) => {
+    active = Math.max(0, Math.min(pages.length - 1, index));
+    const token = ++request;
+    const page = pages[active];
+    const focusedControl = document.activeElement;
+    prev.disabled = active === 0;
+    next.disabled = active === pages.length - 1;
+    if ((focusedControl === prev && prev.disabled) || (focusedControl === next && next.disabled)) viewport.focus({ preventScroll: true });
+    select.value = String(active);
+    count.textContent = `${active + 1} / ${pages.length}`;
+    image.style.visibility = "hidden";
+    viewport.setAttribute("aria-busy", "true");
+    status.hidden = false;
+    retry.hidden = true;
+    message.textContent = "正在加载…";
+    image.alt = `倒转 · ${page.label}`;
+    image.src = page.src;
+    viewport.scrollTo(0, 0);
+    try {
+      await image.decode();
+      if (token !== request) return;
+      status.hidden = true;
+      image.style.visibility = "visible";
+      if (!matchMedia("(prefers-reduced-motion: reduce)").matches) image.animate([{ opacity: .4 }, { opacity: 1 }], { duration: 180 });
+      if (pages[active + 1]) { const preload = new Image(); preload.src = pages[active + 1].src; }
+    } catch {
+      if (token !== request) return;
+      message.textContent = "本页加载失败";
+      retry.hidden = false;
+    } finally {
+      if (token === request) viewport.setAttribute("aria-busy", "false");
+    }
+  };
+  document.querySelectorAll<HTMLElement>("[data-comic-open]").forEach(button => button.addEventListener("click", () => {
+    source = button;
+    previousOverflow = document.documentElement.style.overflow;
+    document.documentElement.style.overflow = "hidden";
+    reader.showModal();
+    void show(0);
+  }));
+  prev.addEventListener("click", () => void show(active - 1));
+  next.addEventListener("click", () => void show(active + 1));
+  select.addEventListener("change", () => void show(Number(select.value)));
+  retry.addEventListener("click", () => void show(active));
+  zoom.addEventListener("click", () => {
+    const enlarged = reader.classList.toggle("is-enlarged");
+    zoom.setAttribute("aria-pressed", String(enlarged));
+    zoom.setAttribute("aria-label", enlarged ? "适合整页" : "放大查看");
+    zoom.title = enlarged ? "适合整页" : "放大查看";
+    viewport.scrollTo(0, 0);
+  });
+  reader.querySelector("[data-comic-close]")!.addEventListener("click", () => reader.close());
+  reader.addEventListener("click", e => { if (e.target === reader) reader.close(); });
+  reader.addEventListener("close", () => {
+    request++;
+    document.documentElement.style.overflow = previousOverflow;
+    source?.focus({ preventScroll: true });
+  });
+  reader.addEventListener("keydown", e => {
+    if (e.target instanceof HTMLSelectElement) return;
+    if (e.key === "ArrowLeft" || e.key === "ArrowRight") {
+      e.preventDefault();
+      void show(active + (e.key === "ArrowLeft" ? -1 : 1));
+    }
+  });
+  viewport.addEventListener("touchstart", e => {
+    touch = e.touches.length === 1 && !reader.classList.contains("is-enlarged") ? { x: e.touches[0].clientX, y: e.touches[0].clientY } : null;
+  }, { passive: true });
+  viewport.addEventListener("touchend", e => {
+    if (!touch || !e.changedTouches.length) return;
+    const dx = e.changedTouches[0].clientX - touch.x;
+    const dy = e.changedTouches[0].clientY - touch.y;
+    if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy) * 1.5) void show(active + (dx < 0 ? 1 : -1));
+    touch = null;
+  }, { passive: true });
+  viewport.addEventListener("touchcancel", () => { touch = null; }, { passive: true });
+</script>
+
+<style>
+  .comic-reader { position: fixed; inset: 0; width: min(1440px, 100%); height: 100dvh; max-width: 100%; max-height: 100%; padding: 0; margin: auto; border: 0; background: #1c1d20; color: #fff; }
+  .comic-reader[open] { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; }
+  .comic-reader::backdrop { background: #000c; }
+  header, footer { display: flex; align-items: center; gap: 16px; padding: 10px 20px; background: #141518; }
+  header { justify-content: space-between; }
+  h2 { font-size: 20px; line-height: 1.3; }
+  h2 span { margin-left: 16px; font-size: 12px; font-weight: 400; color: #c1c3ca; }
+  .reader-tools { display: flex; gap: 8px; }
+  button { width: 44px; height: 44px; display: grid; place-items: center; flex: 0 0 44px; border: 1px solid #ffffff50; background: transparent; color: inherit; border-radius: 6px; cursor: pointer; }
+  button svg { width: 20px; height: 20px; }
+  button:hover:not(:disabled), button[aria-pressed="true"] { background: #ffffff20; }
+  button:disabled { opacity: .3; cursor: default; }
+  :is(button, select, .comic-viewport):focus-visible { outline: 2px solid #ccff65; outline-offset: -2px; }
+  .comic-viewport { position: relative; min-height: 0; overflow: auto; overscroll-behavior: contain; padding: 12px; touch-action: pan-y pinch-zoom; }
+  .comic-viewport img { display: block; width: 100%; height: 100%; object-fit: contain; user-select: none; }
+  .is-enlarged .comic-viewport { touch-action: auto; }
+  .is-enlarged .comic-viewport img { width: 100%; height: auto; max-width: none; }
+  .reader-status { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 16px; }
+  [hidden] { display: none !important; }
+  .reader-status p { font-size: 14px; }
+  footer { justify-content: center; padding-bottom: max(10px, env(safe-area-inset-bottom)); }
+  .page-control { display: flex; align-items: center; gap: 12px; }
+  select { height: 44px; min-width: 110px; padding: 0 12px; border: 1px solid #ffffff50; border-radius: 6px; color: #fff; background: #242529; font: inherit; font-size: 14px; }
+  .page-control span { min-width: 48px; font-size: 13px; color: #c1c3ca; font-variant-numeric: tabular-nums; }
+  @media(max-width: 600px) {
+    header, footer { padding-left: 12px; padding-right: 12px; gap: 12px; }
+    h2 span { display: block; margin: 3px 0 0; }
+    .comic-viewport { padding: 6px; }
+    .is-enlarged .comic-viewport img { width: 180%; }
+    .page-control { gap: 8px; }
+  }
+</style>

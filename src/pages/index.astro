@@ -9,6 +9,7 @@ import ModelStage from "../components/ModelStage.astro";
 import { journalEntries } from "../data/journal";
 import "../styles/lower-portfolio.css";
 import ArchiveViewer from "../components/ArchiveViewer.astro";
+import ComicReader from "../components/ComicReader.astro";
 
 const base = import.meta.env.BASE_URL;
 const selected = [
@@ -163,7 +164,7 @@ const selected = [
           <figcaption><div><span>01 / AIGC ANIMATION</span><b>花灯缘</b></div><button type="button" data-gallery-open aria-label="查看花灯缘图集"><i data-lucide="arrow-up-right"></i></button></figcaption>
         </figure>
         <figure class="lantern-frames" data-gallery="花灯缘 · 分镜"><div><img src={`${base}assets/elements/lantern-shot-look.png`} alt="花灯缘镜头一" loading="lazy" /><img src={`${base}assets/elements/lantern-shot-fish.png`} alt="花灯缘镜头二" loading="lazy" /><img src={`${base}assets/elements/lantern-shot-sky.png`} alt="花灯缘镜头三" loading="lazy" /></div><figcaption><div><span>02 / VISUAL STORYTELLING</span><b>Light & Shots</b></div><button type="button" data-gallery-open aria-label="查看分镜图集"><i data-lucide="arrow-up-right"></i></button></figcaption></figure>
-        <figure class="comic-stack" data-gallery="倒转 · 漫画"><div><img src={`${base}assets/elements/comic-cover.png`} alt="倒转漫画封面" loading="lazy" /><img src={`${base}assets/elements/comic-page-01.png`} alt="倒转漫画第一页" loading="lazy" /><img src={`${base}assets/elements/comic-page-02.png`} alt="倒转漫画第二页" loading="lazy" /></div><figcaption><div><span>03 / PERSONAL COMIC</span><b>倒转</b></div><button type="button" data-gallery-open aria-label="查看倒转漫画"><i data-lucide="arrow-up-right"></i></button></figcaption></figure>
+        <figure class="comic-stack"><div><img src={`${base}assets/comics/daozhuan/cover.jpg`} alt="倒转漫画封面" loading="lazy" /><img src={`${base}assets/comics/daozhuan/page-01.jpg`} alt="倒转漫画第一页" loading="lazy" /><img src={`${base}assets/comics/daozhuan/page-02.jpg`} alt="倒转漫画第二页" loading="lazy" /></div><figcaption><div><span>03 / PERSONAL COMIC</span><b>倒转</b></div><button type="button" data-comic-open aria-label="阅读倒转完整漫画"><i data-lucide="arrow-up-right"></i></button></figcaption></figure>
       </div>
     </section>
 
@@ -197,6 +198,7 @@ const selected = [
       <footer><span>© 2026 Wang Xinyuan</span><a href="#">Back to top <i data-lucide="arrow-up-right"></i></a></footer>
     </section>
     <ArchiveViewer />
+    <ComicReader />
     <p class="contact-toast" role="status" aria-live="polite" data-copy-status></p>
   </main>
 
