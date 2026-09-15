@@ -10,13 +10,11 @@ import { journalEntries } from "../data/journal";
 import "../styles/lower-portfolio.css";
 import ArchiveViewer from "../components/ArchiveViewer.astro";
 import ComicReader from "../components/ComicReader.astro";
+import ProjectIndex from "../components/ProjectIndex.astro";
+import GameDemo from "../components/GameDemo.astro";
+import LanternFeature from "../components/LanternFeature.astro";
 
 const base = import.meta.env.BASE_URL;
-const selected = [
-  { index: "01", type: "Graduation Film", title: "SHU TU", cn: "蔬途", image: "images/shutu-scene-03.jpg", href: "#shutu", theme: "acid" },
-  { index: "02", type: "3D Character / Cultural IP", title: "NUO OPERA", cn: "傩戏角色", image: "elements/nuo-folder-01.png", href: "#nuo", theme: "cyan" },
-  { index: "03", type: "Spatial Interaction", title: "FREE MOGULE", cn: "自由命题", image: "elements/mogule-figure-02.png", href: "#experiments", theme: "coral" },
-];
 ---
 
 <BaseLayout>
@@ -26,34 +24,11 @@ const selected = [
     <LanyardBadge />
     <ProfileIntro />
 
-    <section class="manifesto grid-surface" id="manifesto">
-      <div class="manifesto-count mono">001 / MANIFESTO</div>
-      <h2>I build characters, worlds,<br />and stories <em>you can step into.</em></h2>
-      <div class="manifesto-foot">
-        <p>王馨苑是一名数字媒体艺术设计师，关注角色、空间与互动叙事如何共同构成一个可进入的世界。</p>
-        <a class="circle-link" href="#work" aria-label="查看作品"><i data-lucide="arrow-down"></i></a>
-      </div>
-    </section>
-
-    <section class="selected-work" id="work">
-      <div class="section-head compact-head">
-        <div><p class="eyebrow">Selected Work</p><h2>THREE<br />ENTRIES</h2></div>
-        <p class="section-intro">不是按年份翻页，而是从三个入口进入动画、角色和交互空间。</p>
-      </div>
-      <div class="work-list">
-        {selected.map((project) => (
-          <a class={`work-row ${project.theme}`} href={project.href}>
-            <div class="work-index mono">{project.index}</div>
-            <div class="work-media"><img src={`${base}assets/${project.image}`} alt={`${project.title} 项目主视觉`} loading="lazy" /></div>
-            <div class="work-name"><span>{project.type}</span><h3>{project.title}</h3><p>{project.cn}</p></div>
-            <i data-lucide="arrow-up-right"></i>
-          </a>
-        ))}
-      </div>
-    </section>
+    <ProjectIndex />
 
     <FilmSection />
     <ModelStage />
+    <GameDemo />
 
     <section class="nuo-archive light-band" id="nuo" aria-labelledby="nuo-title">
       <div class="section-head">
@@ -139,7 +114,7 @@ const selected = [
           </section>
         </div>
       </dialog>
-      <article class="experiment-feature reverse" data-reveal>
+      <article class="experiment-feature reverse" id="post-goose" data-reveal>
         <div class="goose-composition" data-parallax-scene>
           <img class="goose-postcard" src={`${base}assets/elements/goose-postcard.png`} alt="校园明信片" loading="lazy" />
           <img class="goose g1" src={`${base}assets/elements/goose-player.png`} alt="玩家雁角色" loading="lazy" />
@@ -153,18 +128,12 @@ const selected = [
 
     <section class="stories light-band lower-section" id="stories">
       <div class="section-head compact-head">
-        <div><p class="eyebrow">Stories & Characters</p><h2>DRAWN,<br />THEN MOVING</h2></div>
+        <div><p class="eyebrow">叙事与影像 / STORIES</p><h2>让画面，<br />讲述故事。</h2></div>
         <p class="section-intro">分镜、漫画、角色与 AIGC 动画实验，共同记录人物被创造出来的过程。</p>
       </div>
       <div class="story-grid">
-        <figure class="story-large lantern-composition" data-gallery="花灯缘">
-          <img class="lantern-title" src={`${base}assets/elements/lantern-title.png`} alt="花灯缘" loading="lazy" />
-          <img class="lantern-person" src={`${base}assets/elements/lantern-character.png`} alt="花灯缘角色" loading="lazy" />
-          <img class="lantern-door" src={`${base}assets/elements/lantern-xiaoyuan-door.png`} alt="小元进家门" loading="lazy" />
-          <figcaption><div><span>01 / AIGC ANIMATION</span><b>花灯缘</b></div><button type="button" data-gallery-open aria-label="查看花灯缘图集"><i data-lucide="arrow-up-right"></i></button></figcaption>
-        </figure>
-        <figure class="lantern-frames" data-gallery="花灯缘 · 分镜"><div><img src={`${base}assets/elements/lantern-shot-look.png`} alt="花灯缘镜头一" loading="lazy" /><img src={`${base}assets/elements/lantern-shot-fish.png`} alt="花灯缘镜头二" loading="lazy" /><img src={`${base}assets/elements/lantern-shot-sky.png`} alt="花灯缘镜头三" loading="lazy" /></div><figcaption><div><span>02 / VISUAL STORYTELLING</span><b>Light & Shots</b></div><button type="button" data-gallery-open aria-label="查看分镜图集"><i data-lucide="arrow-up-right"></i></button></figcaption></figure>
-        <figure class="comic-stack"><div><img src={`${base}assets/comics/daozhuan/cover.jpg`} alt="倒转漫画封面" loading="lazy" /><img src={`${base}assets/comics/daozhuan/page-01.jpg`} alt="倒转漫画第一页" loading="lazy" /><img src={`${base}assets/comics/daozhuan/page-02.jpg`} alt="倒转漫画第二页" loading="lazy" /></div><figcaption><div><span>03 / PERSONAL COMIC</span><b>倒转</b></div><button type="button" data-comic-open aria-label="阅读倒转完整漫画"><i data-lucide="arrow-up-right"></i></button></figcaption></figure>
+        <LanternFeature />
+        <figure class="comic-stack" id="comic"><div><img src={`${base}assets/comics/daozhuan/cover.jpg`} alt="倒转漫画封面" loading="lazy" /><img src={`${base}assets/comics/daozhuan/page-01.jpg`} alt="倒转漫画第一页" loading="lazy" /><img src={`${base}assets/comics/daozhuan/page-02.jpg`} alt="倒转漫画第二页" loading="lazy" /></div><figcaption><div><span>原创漫画 / 完整阅读</span><b>倒转</b></div><button type="button" data-comic-open aria-label="阅读倒转完整漫画"><i data-lucide="arrow-up-right"></i></button></figcaption></figure>
       </div>
     </section>
 
@@ -225,10 +194,10 @@ const selected = [
     if (!reduced) {
       gsap.from(".contact-bubble", { scale: .65, y: 26, opacity: 0, duration: .8, stagger: .18, ease: "back.out(1.4)", scrollTrigger: { trigger: "#identity", start: "top 55%", once: true } });
       gsap.utils.toArray<HTMLElement>("[data-reveal], .journal-rows a").forEach(item => gsap.from(item, { y: 36, opacity: 0, duration: .85, ease: "power3.out", scrollTrigger: { trigger: item, start: "top 91%", once: true } }));
-      gsap.utils.toArray<HTMLElement>(".work-row").forEach((row) => {
+      gsap.utils.toArray<HTMLElement>(".project-index nav a").forEach((row) => {
         gsap.from(row, { y: 70, opacity: 0, duration: 0.9, ease: "power3.out", scrollTrigger: { trigger: row, start: "top 84%" } });
       });
-      gsap.utils.toArray<HTMLElement>(".section-head h2, .manifesto h2").forEach((heading) => {
+      gsap.utils.toArray<HTMLElement>(".section-head h2, .project-index h2").forEach((heading) => {
         gsap.from(heading, { yPercent: 18, opacity: 0, duration: 1, ease: "power3.out", scrollTrigger: { trigger: heading, start: "top 86%" } });
       });
       gsap.utils.toArray<HTMLElement>(".story-grid figure").forEach((item) => {

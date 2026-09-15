@@ -1,0 +1,37 @@
+---
+const projects = [
+  ["蔬途", "毕业作品 / 三维动画", "shutu"],
+  ["这银子我先偷了", "Unity / 游戏 Demo", "silver-game"],
+  ["傩戏角色", "传统文化 / 三维 IP", "nuo"],
+  ["自由模数", "VR / 空间交互", "experiments"],
+  ["POST GOOSE", "校园 / 游戏设计", "post-goose"],
+  ["花灯缘", "新华社合作 / AIGC 动画", "lantern"],
+  ["倒转", "原创漫画 / 完整阅读", "comic"],
+  ["实习与商业设计", "视觉传播 / 活动物料", "commercial"],
+];
+---
+<section class="project-index" id="work" aria-labelledby="index-title">
+  <span id="manifesto" aria-hidden="true"></span>
+  <header><div><p>作品索引 / SELECTED WORKS</p><h2 id="index-title">从一个角色，<br />走进不同的世界。</h2></div><p class="index-note">王馨苑 · 数字媒体艺术<br />动画、游戏、角色与互动叙事。</p></header>
+  <nav aria-label="全部作品快捷目录">
+    {projects.map(([name, type, id], i) => <a href={`#${id}`}><span class="index-number">{String(i+1).padStart(2,"0")}</span><div><h3>{name}</h3><p>{type}</p></div><i data-lucide="arrow-up-right"></i></a>)}
+  </nav>
+</section>
+<style>
+  .project-index { padding: 88px var(--pad); background: #f7f8fa; color: #161719; }
+  header { display: flex; justify-content: space-between; align-items: end; gap: 32px; margin-bottom: 48px; }
+  header p { font-size: 13px; color: #56606b; }
+  h2 { font-size: 48px; line-height: 1.3; margin-top: 20px; }
+  .index-note { line-height: 1.9; }
+  nav { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); column-gap: 48px; border-top: 2px solid #17191c; }
+  nav a { display: grid; grid-template-columns: 32px minmax(0,1fr) 24px; align-items: center; gap: 16px; padding: 26px 8px; border-bottom: 1px solid #cfd4db; transition: color .2s, background .2s; }
+  .index-number { align-self: start; padding-top: 5px; font-size: 12px; color: #0060f4; font-variant-numeric: tabular-nums; }
+  h3 { font-size: 23px; line-height: 1.4; }
+  nav p { margin-top: 7px; color: #606872; font-size: 13px; }
+  nav svg { width: 22px; transition: transform .25s; }
+  nav a:hover { color: #0059ed; background: #edf2ff; }
+  nav a:hover svg { transform: translate(3px,-3px); }
+  nav a:focus-visible { outline: 3px solid #0059ed; outline-offset: 3px; }
+  @media(max-width:700px) { .project-index { padding-top: 56px; padding-bottom: 56px; } header { display: block; margin-bottom: 30px; } h2 { font-size: 30px; } .index-note { margin-top: 22px; } nav { grid-template-columns: 1fr; } h3 { font-size: 21px; } nav a { padding: 20px 0; } }
+  @media(prefers-reduced-motion:reduce) { nav a, nav svg { transition: none; } }
+</style>

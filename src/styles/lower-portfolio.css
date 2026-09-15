@@ -49,6 +49,7 @@
 .stories .lantern-frames img { object-fit: cover; border-radius: 0; }
 .stories .lantern-frames img:first-child { grid-column: span 2; }
 .stories .comic-stack > div { min-height: 460px; background: #dcd6ef; border-radius: 0; }
+.stories .comic-stack { grid-column: 1/-1; }
 .stories .comic-stack img { transition: transform .6s cubic-bezier(.22,1,.36,1); }
 @media(hover: hover) {
   .stories .comic-stack:hover img:first-child { transform: translateX(-96%) rotate(-12deg); }
