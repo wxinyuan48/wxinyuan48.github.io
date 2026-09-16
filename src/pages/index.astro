@@ -15,6 +15,7 @@ import GameDemo from "../components/GameDemo.astro";
 import LanternFeature from "../components/LanternFeature.astro";
 import GooseDemo from "../components/GooseDemo.astro";
 import "../styles/editorial-type.css";
+import ArtTitle from "../components/ArtTitle.astro";
 
 const base = import.meta.env.BASE_URL;
 ---
@@ -69,7 +70,7 @@ const base = import.meta.env.BASE_URL;
 
     <section class="experiments dark-band lower-section" id="experiments">
       <div class="section-head">
-        <div><p class="eyebrow">身体入场，故事发生 / IMMERSIVE SPACE</p><h2 class="type-poster"><span class="type-kicker" aria-hidden="true">PLAY THE RULES.</span><span>把规则，变成</span><em>可走入的空间。</em></h2></div>
+        <div><p class="eyebrow">身体入场，故事发生 / IMMERSIVE SPACE</p><h2 class="approved-title approved-title-space" aria-label="把规则，变成可走入的空间。"><ArtTitle variant="space" /></h2></div>
         <p class="section-intro">把抽象命题变成身体可以经历的路线、循环和反馈。</p>
       </div>
       <nav class="archive-nav" aria-label="作品分类"><span>SELECTED EXPLORATIONS / 03</span><a href="#experiments">01 交互空间</a><a href="#stories">02 叙事影像</a><a href="#commercial">03 实践设计</a></nav>
@@ -130,7 +131,7 @@ const base = import.meta.env.BASE_URL;
 
     <section class="stories light-band lower-section" id="stories">
       <div class="section-head compact-head">
-        <div><p class="eyebrow">从一格画面，到一段共鸣 / VISUAL STORIES</p><h2 class="type-poster"><span class="type-kicker" aria-hidden="true">BEYOND THE FRAME.</span><span>画面之外，</span><em>故事继续。</em></h2></div>
+        <div><p class="eyebrow">从一格画面，到一段共鸣 / VISUAL STORIES</p><h2 class="approved-title approved-title-story" aria-label="画面之外，故事继续。"><ArtTitle variant="story" /></h2></div>
         <p class="section-intro">分镜、漫画、角色与 AIGC 动画实验，共同记录人物被创造出来的过程。</p>
       </div>
       <div class="story-grid">

@@ -1,0 +1,33 @@
+---
+interface Props { variant: "space" | "game" | "story"; }
+const { variant } = Astro.props;
+const regions = {
+  space: { x: 58, y: 80, width: 1095, height: 232, inverse: false },
+  game: { x: 58, y: 414, width: 840, height: 238, inverse: true },
+  story: { x: 58, y: 758, width: 835, height: 230, inverse: true },
+};
+const region = regions[variant];
+const id = `title-art-${variant}`;
+const base = import.meta.env.BASE_URL;
+---
+<svg class="art-title" viewBox={`${region.x} ${region.y} ${region.width} ${region.height}`} width={region.width} height={region.height} aria-hidden="true" focusable="false">
+  <defs>
+    <!-- Use the approved artwork as a luminance mask, leaving its source untouched. -->
+    <filter id={`${id}-ink`} color-interpolation-filters="sRGB">
+      <feColorMatrix type="saturate" values="0" />
+      <feComponentTransfer>
+        <feFuncR type="linear" slope={region.inverse ? -4 : 4} intercept={region.inverse ? 3 : -2} />
+        <feFuncG type="linear" slope={region.inverse ? -4 : 4} intercept={region.inverse ? 3 : -2} />
+        <feFuncB type="linear" slope={region.inverse ? -4 : 4} intercept={region.inverse ? 3 : -2} />
+      </feComponentTransfer>
+    </filter>
+    <mask id={id} maskUnits="userSpaceOnUse" x={region.x} y={region.y} width={region.width} height={region.height} style="mask-type:luminance">
+      <image href={`${base}assets/images/approved-title-study.png`} x="0" y="0" width="1536" height="1024" filter={`url(#${id}-ink)`} />
+    </mask>
+  </defs>
+  <rect x={region.x} y={region.y} width={region.width} height={region.height} fill="currentColor" mask={`url(#${id})`} />
+</svg>
+<style>
+  .art-title { display:block; width:100%; height:auto; overflow:hidden; }
+  @media(forced-colors:active) { .art-title { forced-color-adjust:none; color:CanvasText; } }
+</style>

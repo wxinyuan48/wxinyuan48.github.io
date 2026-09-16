@@ -1,10 +1,11 @@
 ---
 import ToolMarks from "./ToolMarks.astro";
+import ArtTitle from "./ArtTitle.astro";
 const base = import.meta.env.BASE_URL;
 ---
 <section class="silver-game" id="silver-game" aria-labelledby="silver-title">
   <header><p>把想法写成游戏 / GAME LAB</p><span>2026 · 开发中</span></header>
-  <div class="game-heading"><h2 id="silver-title">这银子<br /><span>我先偷了</span><sup>！</sup></h2><div class="game-authorship"><p class="contribution-label">个人贡献 / 独立创作</p><h3>全流程独立制作<br /><em>AI Coding</em> 驱动实现</h3><p class="game-note">由我独立完成游戏 Demo 全流程，以 AI 辅助编程实现交互，并使用 Blender 辅助三维制作。</p><ToolMarks tools={[{id:"unity",name:"Unity",detail:"游戏开发与交互"},{id:"blender",name:"Blender",detail:"三维制作辅助"}]} /><button type="button" data-game-open><i data-lucide="play"></i>观看实机演示 <span>01:39</span></button></div></div>
+  <div class="game-heading"><h2 id="silver-title" class="approved-title approved-title-game" aria-label="这银子我先偷了！"><ArtTitle variant="game" /></h2><div class="game-authorship"><p class="contribution-label">个人贡献 / 独立创作</p><h3>全流程独立制作<br /><em>AI Coding</em> 驱动实现</h3><p class="game-note">由我独立完成游戏 Demo 全流程，以 AI 辅助编程实现交互，并使用 Blender 辅助三维制作。</p><ToolMarks tools={[{id:"unity",name:"Unity",detail:"游戏开发与交互"},{id:"blender",name:"Blender",detail:"三维制作辅助"}]} /><button type="button" data-game-open><i data-lucide="play"></i>观看实机演示 <span>01:39</span></button></div></div>
   <button class="game-scene" type="button" data-game-open aria-label="播放这银子我先偷了游戏实机演示"><img src={`${base}assets/images/silver-game.png`} alt="这银子我先偷了：水乡建筑、石桥与码头组成的游戏关卡" loading="lazy" /><span class="scene-play"><i data-lucide="play"></i></span></button>
   <div class="game-caption"><span>这银子我先偷了 / 游戏场景</span><span>UNITY · 实机录屏</span></div>
 </section>

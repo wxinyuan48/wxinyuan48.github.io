@@ -5,6 +5,15 @@
   font-display:swap;
 }
 :root { --editorial-sans:"Portfolio Sans","Noto Sans SC","Microsoft YaHei",Arial,sans-serif; }
+.approved-title { margin:0; min-width:0; }
+.approved-title-space { width:min(100%,780px); color:#f5f5f2; }
+.approved-title-story { width:min(100%,640px); color:#161719; }
+.silver-game .game-heading>.approved-title-game { width:min(100%,620px); max-width:620px; flex:1 1 620px; color:#103f39; }
+.silver-game .game-authorship { flex:0 1 460px; }
+@media(max-width:700px) {
+  .approved-title-space,.approved-title-story { width:100%; }
+  .silver-game .game-heading>.approved-title-game { width:min(100%,440px); padding:10px 0 6px; }
+}
 /* Each title keeps one weight; scale and alignment provide hierarchy. */
 .lower-section .section-head h2.type-poster,
 .commercial .commercial-title h2.type-poster {
