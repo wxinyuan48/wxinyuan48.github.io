@@ -32,7 +32,7 @@ const base = import.meta.env.BASE_URL;
 
     <section class="nuo-archive light-band" id="nuo" aria-labelledby="nuo-title">
       <div class="section-head">
-        <div><p class="eyebrow">Character / Mask / Derivatives</p><h2 id="nuo-title">NUO<br />ARCHIVE</h2></div>
+        <div><p class="eyebrow">面具之下，角色登场 / CHARACTER DESIGN</p><h2 id="nuo-title">傩戏<br />新生。</h2></div>
         <p class="section-intro">从文化符号、面具与人物比例出发，建立一套可延展的角色及衍生品系统。</p>
       </div>
       <div class="nuo-layer-scene" data-nuo-stage tabindex="0" aria-label="傩戏角色圆环档案，可用方向键切换">
@@ -67,7 +67,7 @@ const base = import.meta.env.BASE_URL;
 
     <section class="experiments dark-band lower-section" id="experiments">
       <div class="section-head">
-        <div><p class="eyebrow">Spatial & Experimental Interaction</p><h2>RULES TO<br />WALK THROUGH</h2></div>
+        <div><p class="eyebrow">身体入场，故事发生 / IMMERSIVE SPACE</p><h2>把规则，变成<br />可走入的空间。</h2></div>
         <p class="section-intro">把抽象命题变成身体可以经历的路线、循环和反馈。</p>
       </div>
       <nav class="archive-nav" aria-label="作品分类"><span>SELECTED EXPLORATIONS / 03</span><a href="#experiments">01 交互空间</a><a href="#stories">02 叙事影像</a><a href="#commercial">03 实践设计</a></nav>
@@ -128,7 +128,7 @@ const base = import.meta.env.BASE_URL;
 
     <section class="stories light-band lower-section" id="stories">
       <div class="section-head compact-head">
-        <div><p class="eyebrow">叙事与影像 / STORIES</p><h2>让画面，<br />讲述故事。</h2></div>
+        <div><p class="eyebrow">从一格画面，到一段共鸣 / VISUAL STORIES</p><h2>画面之外，<br />故事继续。</h2></div>
         <p class="section-intro">分镜、漫画、角色与 AIGC 动画实验，共同记录人物被创造出来的过程。</p>
       </div>
       <div class="story-grid">
@@ -138,7 +138,7 @@ const base = import.meta.env.BASE_URL;
     </section>
 
     <section class="commercial lower-section" id="commercial">
-      <div class="commercial-title"><p class="eyebrow">Commercial / Internship</p><h2>REAL BRIEFS.<br />REAL DELIVERY.</h2></div>
+      <div class="commercial-title"><p class="eyebrow">走出练习，回应真实 / DESIGN IN PRACTICE</p><h2>让创意，<br />落在现场。</h2></div>
       <div class="commercial-list">
         <article data-reveal data-gallery="Sohu New Media"><span class="mono">01</span><h3>Sohu New Media</h3><p>赛事宣传、采访、短视频与平面视觉</p><div class="poster-pair"><img src={`${base}assets/elements/internship-poster-01.png`} alt="搜狐实习海报一" loading="lazy" /><img src={`${base}assets/elements/internship-poster-02.png`} alt="搜狐实习海报二" loading="lazy" /></div><button class="archive-open" type="button" data-gallery-open>查看作品 <i data-lucide="arrow-up-right"></i></button></article>
         <article data-reveal data-gallery="Campaign Objects"><span class="mono">02</span><h3>Campaign Objects</h3><p>从视觉系统中拆出的线下媒介与活动物料</p><img src={`${base}assets/elements/internship-sign.png`} alt="活动麦牌设计" loading="lazy" /><button class="archive-open" type="button" data-gallery-open>查看作品 <i data-lucide="arrow-up-right"></i></button></article>
@@ -147,7 +147,7 @@ const base = import.meta.env.BASE_URL;
 
     <section class="journal-preview lower-section" id="notes">
       <div class="section-head compact-head">
-        <div><p class="eyebrow">Personal Journal</p><h2>NOTES FROM<br />THE PROCESS</h2></div>
+        <div><p class="eyebrow">作品背后，还有这些 / STUDIO NOTES</p><h2>灵感有迹，<br />创作有声。</h2></div>
         <a class="text-button" href={`${base}journal/`}><span>Open Journal</span><i data-lucide="arrow-up-right"></i></a>
       </div>
       <div class="journal-rows">
@@ -162,7 +162,7 @@ const base = import.meta.env.BASE_URL;
     <section class="about lower-section" id="about">
       <div class="about-index mono">LET'S MAKE SOMETHING / 联系我</div>
       <div class="about-copy" data-reveal><h2>LET’S<br />CREATE.</h2><p>王馨苑 / 数字媒体艺术<br />从一个想法，到一个可以被进入的世界。</p></div>
-      <div class="contact-lines"><a href="mailto:buchifanqieqieqie@outlook.com"><span>EMAIL</span><strong>buchifanqieqieqie<wbr />@outlook.com</strong><i data-lucide="arrow-up-right"></i></a><button type="button" data-copy-wechat><span>WECHAT / 微信</span><strong>15974210370</strong><i data-lucide="copy"></i></button></div>
+      <div class="contact-lines"><button type="button" data-copy-email aria-label="复制邮箱 buchifanqieqieqie@outlook.com"><span>EMAIL / 邮箱</span><strong>buchifanqieqieqie<wbr />@outlook.com</strong><i data-lucide="copy"></i></button><button type="button" data-copy-wechat><span>WECHAT / 微信</span><strong>15974210370</strong><i data-lucide="copy"></i></button></div>
       <div class="about-meta"><div><span>Focus</span><p>Character / World / Motion / Interaction</p></div><div><span>Tools</span><p>Blender / C4D / Unity / Adobe CC / AIGC</p></div></div>
       <footer><span>© 2026 Wang Xinyuan</span><a href="#">Back to top <i data-lucide="arrow-up-right"></i></a></footer>
     </section>
@@ -179,12 +179,17 @@ const base = import.meta.env.BASE_URL;
     document.addEventListener("portfolio:layout-change", () => requestAnimationFrame(() => ScrollTrigger.refresh()));
     const copyStatus = document.querySelector<HTMLElement>("[data-copy-status]");
     let toastTimer = 0;
-    document.querySelectorAll<HTMLButtonElement>("[data-copy-wechat]").forEach(button => button.addEventListener("click", async () => {
+    document.querySelectorAll<HTMLButtonElement>("[data-copy-wechat], [data-copy-email]").forEach(button => button.addEventListener("click", async () => {
+      const isEmail = button.hasAttribute("data-copy-email");
+      const value = isEmail ? "buchifanqieqieqie@outlook.com" : "15974210370";
+      const label = isEmail ? "邮箱" : "微信号";
       try {
-        await navigator.clipboard.writeText("15974210370");
-        if (copyStatus) copyStatus.textContent = "微信号已复制：15974210370";
+        await navigator.clipboard.writeText(value);
+        if (copyStatus) copyStatus.textContent = `${label}已复制：${value}`;
       } catch {
-        if (copyStatus) copyStatus.textContent = "微信号：15974210370（可在页尾选择复制）";
+        const text = button.querySelector("strong");
+        if (text) { const range = document.createRange(); range.selectNodeContents(text); const selection = window.getSelection(); selection?.removeAllRanges(); selection?.addRange(range); }
+        if (copyStatus) copyStatus.textContent = `无法自动复制，已选中${label}：${value}`;
       }
       copyStatus?.classList.add("is-visible");
       clearTimeout(toastTimer);
@@ -192,7 +197,6 @@ const base = import.meta.env.BASE_URL;
     }));
 
     if (!reduced) {
-      gsap.from(".contact-bubble", { scale: .65, y: 26, opacity: 0, duration: .8, stagger: .18, ease: "back.out(1.4)", scrollTrigger: { trigger: "#identity", start: "top 55%", once: true } });
       gsap.utils.toArray<HTMLElement>("[data-reveal], .journal-rows a").forEach(item => gsap.from(item, { y: 36, opacity: 0, duration: .85, ease: "power3.out", scrollTrigger: { trigger: item, start: "top 91%", once: true } }));
       gsap.utils.toArray<HTMLElement>(".project-index nav a").forEach((row) => {
         gsap.from(row, { y: 70, opacity: 0, duration: 0.9, ease: "power3.out", scrollTrigger: { trigger: row, start: "top 84%" } });
