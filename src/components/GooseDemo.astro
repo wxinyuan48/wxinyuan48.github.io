@@ -1,0 +1,47 @@
+---
+const base = import.meta.env.BASE_URL;
+---
+<div class="goose-demo-entry">
+  <button type="button" data-goose-open><i data-lucide="play"></i><span>观看邮雁 Demo</span><small>02:40</small></button>
+</div>
+<dialog class="goose-dialog" aria-labelledby="goose-video-title">
+  <header><h2 id="goose-video-title">邮雁 <span>游戏演示 / POST GOOSE</span></h2><button type="button" data-goose-close aria-label="关闭邮雁演示"><i data-lucide="x"></i></button></header>
+  <video controls playsinline preload="none" poster={`${base}assets/images/post-goose-demo.jpg`}><source src={`${base}assets/video/post-goose-demo.mp4`} type="video/mp4" />你的浏览器不支持视频播放。</video>
+  <p class="goose-video-error" hidden>视频暂时无法播放，<a href={`${base}assets/video/post-goose-demo.mp4`}>打开原视频</a></p>
+</dialog>
+<script>
+  const dialog = document.querySelector<HTMLDialogElement>(".goose-dialog")!;
+  const video = dialog.querySelector("video")!;
+  const opener = document.querySelector<HTMLButtonElement>("[data-goose-open]")!;
+  let overflow = "";
+  opener.addEventListener("click", () => {
+    overflow = document.documentElement.style.overflow;
+    document.documentElement.style.overflow = "hidden";
+    dialog.showModal();
+    void video.play().catch(() => {});
+  });
+  dialog.querySelector("[data-goose-close]")!.addEventListener("click", () => dialog.close());
+  dialog.addEventListener("click", event => { if (event.target === dialog) dialog.close(); });
+  dialog.addEventListener("close", () => {
+    video.pause(); document.documentElement.style.overflow = overflow; opener.focus({preventScroll:true});
+  });
+  const showError = () => { dialog.querySelector<HTMLElement>(".goose-video-error")!.hidden = false; };
+  video.addEventListener("error", showError);
+  video.querySelector("source")!.addEventListener("error", showError);
+</script>
+<style>
+  .goose-demo-entry { margin-top:28px; }
+  .goose-demo-entry button { display:flex; align-items:center; gap:14px; min-height:54px; padding:12px 20px; background:#143d32; color:#fff; border:0; border-radius:4px; cursor:pointer; font-size:15px; }
+  .goose-demo-entry small { color:#d1f5ad; font-family:"Anton",sans-serif; font-size:16px; }
+  .goose-demo-entry button span { color:white; }
+  button svg { width:20px; height:20px; }
+  .goose-dialog { position:fixed; inset:0; margin:auto; padding:0; width:min(1200px,96%); max-height:94dvh; overflow:auto; background:#101819; color:white; border:0; border-radius:6px; }
+  .goose-dialog::backdrop { background:#000c; backdrop-filter:blur(8px); }
+  .goose-dialog header { display:flex; justify-content:space-between; align-items:center; gap:12px; padding:12px 18px; }
+  .goose-dialog header h2 { font:600 20px/1.5 sans-serif; }
+  .goose-dialog h2 span { display:inline-block; font:12px/1.5 sans-serif; color:#c9dcda; margin-left:12px; }
+  .goose-dialog header button { flex-shrink:0; width:44px; height:44px; display:grid; place-items:center; background:transparent; border:1px solid #ffffff66; border-radius:50%; color:inherit; cursor:pointer; }
+  .goose-dialog video { display:block; width:100%; max-height:calc(94dvh - 80px); aspect-ratio:64/33; background:#000; }
+  .goose-video-error { padding:16px; }.goose-video-error a { text-decoration:underline; }
+  button:focus-visible { outline:3px solid #0061ff; outline-offset:4px; }
+</style>

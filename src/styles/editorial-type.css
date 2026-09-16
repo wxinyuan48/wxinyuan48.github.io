@@ -1,0 +1,42 @@
+@font-face { font-family: "Anton"; src:url("/assets/fonts/Anton-Regular.woff2") format("woff2"); font-weight:400; font-display:swap; }
+@font-face { font-family: "Qingke"; src:url("/assets/fonts/ZCOOLQingKeHuangYou-Regular.woff2") format("woff2"); font-weight:400; font-display:swap; }
+/* Display treatments are restricted to titles; body copy and the hero artwork stay intact. */
+.lower-section .section-head h2.type-poster,
+.commercial .commercial-title h2.type-poster { font:400 76px/1.15 "Qingke","Microsoft YaHei",sans-serif; letter-spacing:0; padding:0 10px 8px 0; }
+.lower-section .type-poster>span:not(.type-kicker), .type-poster>em { display:block; font-size:inherit; line-height:inherit; color:inherit; }
+.type-poster>em { font-style:normal; width:fit-content; margin-left:40px; transform:skewX(-7deg); transform-origin:left center; color:#0758ef; }
+.type-poster .type-kicker { display:block; width:fit-content; font:400 22px/1.2 "Anton",sans-serif; margin-bottom:20px; border-top:2px solid currentColor; padding-top:8px; }
+.experiments .type-poster>em { color:#d1fa4a; }
+.stories .type-poster>em { color:transparent; -webkit-text-stroke:1.5px #0758ef; }
+.commercial .type-poster>em { background:#cafa47; color:#162126; padding:0 12px 4px; }
+.journal-preview .type-poster>em { border-bottom:5px solid #0758ef; }
+.lower-section .mogule-stage-title h3,
+.lower-section .journal-rows h3,
+.lower-section .commercial-list h3,
+.about.lower-section .about-copy h2 { font-family:"Anton",sans-serif; font-weight:400; letter-spacing:0; }
+.about.lower-section .about-copy h2 { font-size:112px; transform:skewX(-5deg); transform-origin:left center; }
+.experiments .experiment-copy .goose-title { margin:20px 0; }
+.experiments .goose-title>span { font:400 116px/1 "Qingke",sans-serif; display:block; transform:rotate(-5deg); color:#153e32; }
+.experiments .goose-title>small { display:block; font:400 32px/1.2 "Anton",sans-serif; margin-top:16px; }
+.silver-game .game-heading>h2 { font-family:"Qingke","Microsoft YaHei",sans-serif; font-weight:400; font-size:88px; transform:skewX(-5deg); transform-origin:left center; }
+.film-section h2, #nuo-title { font-family:"Qingke","Microsoft YaHei",sans-serif; font-weight:400; }
+@media(hover:hover) and (prefers-reduced-motion:no-preference) {
+  .type-poster>em { transition:transform .55s cubic-bezier(.22,1,.36,1); }
+  .type-poster:hover>em { transform:skewX(-2deg) translateX(6px); }
+}
+@media(max-width:1000px) {
+  .lower-section .section-head h2.type-poster,.commercial .commercial-title h2.type-poster { font-size:56px; }
+  .type-poster>em { margin-left:20px; }
+  .silver-game .game-heading>h2 { font-size:66px; }
+}
+@media(max-width:700px) {
+  .lower-section .section-head h2.type-poster,.commercial .commercial-title h2.type-poster { font-size:42px; line-height:1.25; }
+  .type-poster .type-kicker { font-size:18px; margin-bottom:16px; }
+  .type-poster>em { margin-left:14px; }
+  .about.lower-section .about-copy h2 { font-size:84px; }
+  .silver-game .game-heading>h2 { font-size:56px; }
+  .experiments .goose-title>span { font-size:92px; }
+}
+@media(max-width:370px) {
+  .lower-section .section-head h2.type-poster,.commercial .commercial-title h2.type-poster { font-size:36px; }
+}
