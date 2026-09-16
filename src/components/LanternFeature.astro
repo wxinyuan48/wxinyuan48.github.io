@@ -7,8 +7,9 @@ const href = "https://h.xinhuaxmt.com/vh512/share/12405384?d=134fe64&channel=wei
     <img src={`${base}assets/elements/lantern-shot-sky.png`} alt="花灯缘动画画面：小元手捧花灯，仰望夜空" loading="lazy" />
     <div class="lantern-cover-copy"><p>新华社合作项目 / AIGC 元宵节动画</p><h2 id="lantern-heading">花灯缘</h2><p class="lantern-line">一盏鱼灯，照见团圆。</p><a href={href} target="_blank" rel="noopener noreferrer">观看完整作品 <i data-lucide="arrow-up-right"></i></a></div>
   </div>
+  <div class="lantern-impact" aria-label="新华社官网播放量超过一百万，据项目作品集资料"><div><span>传播成果 / PROJECT REACH</span><strong>100<span>万＋</span></strong></div><div><h3>新华社官网播放量</h3><p>让传统节日里的团圆故事，被更多人看见。</p><small>数据来源：项目作品集资料</small></div></div>
   <div class="lantern-editorial">
-    <div><p class="lantern-label">关于作品</p><h3>灯火阑珊处，<br />总有人在等你归来。</h3><p>与新华社合作的 AIGC 元宵节动画，以安徽村落的鱼灯习俗为线索，讲述小元与爷爷跨越古今的团圆故事。</p><div class="lantern-credit"><strong>100 万＋</strong><span>新华社官网播放量<br />据项目作品集资料</span></div></div>
+    <div><p class="lantern-label">关于作品</p><h3>灯火阑珊处，<br />总有人在等你归来。</h3><p>与新华社合作的 AIGC 元宵节动画，以安徽村落的鱼灯习俗为线索，讲述小元与爷爷跨越古今的团圆故事。</p></div>
     <div><p class="lantern-label">故事脉络</p><ol><li><span>01</span><div><h4>一同做灯</h4><p>小元起初不理解爷爷制作鱼灯的执着。</p></div></li><li><span>02</span><div><h4>走进灯会</h4><p>和伙伴看灯、赏烟花，逐渐读懂元宵习俗与手艺人的坚守。</p></div></li><li><span>03</span><div><h4>灯下团圆</h4><p>在灯会结尾与爷爷相聚，镜头转向古今两个小元的身影。时代向前，亲情与非遗传承始终相连。</p></div></li></ol></div>
   </div>
 </article>
@@ -26,8 +27,14 @@ const href = "https://h.xinhuaxmt.com/vh512/share/12405384?d=134fe64&channel=wei
   .lantern-label { color: #697781; font-size: 12px; margin-bottom: 18px; }
   h3 { font-size: 28px; line-height: 1.5; margin-bottom: 20px; }
   .lantern-editorial p:not(.lantern-label) { font-size: 15px; line-height: 1.9; }
-  .lantern-credit { display: flex; align-items: center; gap: 18px; margin-top: 28px; }
-  .lantern-credit strong { font-size: 32px; color: #005c65; }.lantern-credit span { font-size: 11px; color: #67737a; line-height: 1.6; }
+  .lantern-impact { display: flex; align-items: center; gap: 64px; padding: 36px 5%; background: #103c43; color: #fff; }
+  .lantern-impact>div>span { display: block; font-size: 12px; color: #c6dfdf; }
+  .lantern-impact strong { display: block; font: 800 88px/1.15 Arial,sans-serif; margin-top: 8px; color: #e5ffa3; white-space: nowrap; }
+  .lantern-impact strong span { font-size: 36px; margin-left: 6px; }
+  .lantern-impact h3 { font-size: 26px; margin: 0 0 10px; }
+  .lantern-impact p { font-size: 14px; line-height: 1.8; }
+  .lantern-impact small { display: block; margin-top: 12px; font-size: 11px; color: #c6dfdf; }
+  @media(max-width:700px) { .lantern-impact { display: block; padding: 28px 6%; }.lantern-impact strong { font-size: 72px; }.lantern-impact strong span { font-size: 28px; }.lantern-impact h3 { margin-top: 20px; font-size: 22px; } }
   ol { list-style: none; padding: 0; margin: 0; } li { display: flex; gap: 22px; padding: 18px 0; border-top: 1px solid #cbd0d4; } li>span { font-size: 12px; color: #005c65; padding-top: 4px; } h4 { font-size: 18px; margin-bottom: 6px; }
   @media(max-width:700px) { .lantern-cover { height: 480px; }.lantern-cover>img { object-position: 48% center; } .lantern-cover::after { background: linear-gradient(transparent 20%,#101b24dc); }.lantern-cover-copy { left: 6%; bottom: 6%; }.lantern-cover-copy h2 { font-size: 56px; }.lantern-editorial { grid-template-columns: 1fr; gap: 32px; padding: 32px 6%; } h3 { font-size: 25px; } }
 </style>
