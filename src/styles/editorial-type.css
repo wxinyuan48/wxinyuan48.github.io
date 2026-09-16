@@ -1,83 +1,14 @@
-@font-face {
-  font-family:"Portfolio Sans";
-  src:url("/assets/fonts/PortfolioSans.woff2") format("woff2");
-  font-weight:100 900;
-  font-display:swap;
-}
-:root { --editorial-sans:"Portfolio Sans","Noto Sans SC","Microsoft YaHei",Arial,sans-serif; }
+/* Approved lettering only. All other headings inherit the original sans-serif styles. */
 .approved-title { margin:0; min-width:0; }
 .approved-title-space { width:min(100%,780px); color:#f5f5f2; }
 .approved-title-story { width:min(100%,640px); color:#161719; }
+.film-section .approved-title-shutu { width:min(100%,360px); color:#f5f5f2; }
 .silver-game .game-heading>.approved-title-game { width:min(100%,620px); max-width:620px; flex:1 1 620px; color:#103f39; }
 .silver-game .game-authorship { flex:0 1 460px; }
+.experiments .goose-title>span { display:block; font:inherit; color:inherit; }
+.experiments .goose-title>small { display:block; font:400 14px/1.5 Arial,sans-serif; margin-top:18px; }
 @media(max-width:700px) {
   .approved-title-space,.approved-title-story { width:100%; }
+  .film-section .approved-title-shutu { width:min(100%,260px); }
   .silver-game .game-heading>.approved-title-game { width:min(100%,440px); padding:10px 0 6px; }
-}
-/* Each title keeps one weight; scale and alignment provide hierarchy. */
-.lower-section .section-head h2.type-poster,
-.commercial .commercial-title h2.type-poster {
-  font-family:var(--editorial-sans); font-size:64px; font-weight:700;
-  line-height:1.2; letter-spacing:0; padding:0; display:grid; gap:12px;
-}
-.type-poster .type-kicker {
-  display:block; font:500 12px/1.5 Arial,sans-serif; color:inherit;
-  margin:0 0 12px; padding:0; opacity:.7;
-}
-.lower-section .type-poster>span:not(.type-kicker) {
-  display:block; font-size:40px; font-weight:inherit; line-height:1.35; color:inherit;
-}
-.type-poster>em {
-  display:block; width:fit-content; max-width:100%; font-style:normal;
-  margin-left:48px; font-size:inherit; font-weight:inherit; line-height:1.25;
-  color:inherit; padding-bottom:4px;
-}
-.stories .type-poster>em { margin-left:88px; }
-.journal-preview .type-poster>em { margin-left:0; }
-.commercial .type-poster>em { margin-left:32px; }
-.lower-section .mogule-stage-title h3 {
-  font-family:var(--editorial-sans); font-weight:850; letter-spacing:0;
-  font-size:80px; line-height:.98;
-}
-.lower-section .journal-rows h3,.lower-section .commercial-list h3 {
-  font-family:var(--editorial-sans); font-weight:650; letter-spacing:0;
-}
-.about.lower-section .about-copy h2 {
-  font-family:var(--editorial-sans); font-weight:800; font-size:92px; line-height:1.04;
-}
-.experiments .experiment-copy .goose-title { margin:24px 0; }
-.experiments .goose-title>span {
-  font:800 100px/1.12 var(--editorial-sans); display:block; color:#153e32;
-}
-.experiments .goose-title>small {
-  display:block; font:400 16px/1.5 Arial,sans-serif; margin-top:18px;
-}
-.silver-game .game-heading>h2 {
-  font-family:var(--editorial-sans); font-weight:700; font-size:64px; line-height:1.3;
-}
-.silver-game .game-heading>h2>span { font-weight:inherit; }
-.film-section .film-head h2,#nuo-title {
-  font-family:var(--editorial-sans); font-weight:800;
-}
-@media(max-width:1100px) {
-  .lower-section .section-head h2.type-poster,.commercial .commercial-title h2.type-poster { font-size:48px; }
-  .lower-section .type-poster>span:not(.type-kicker) { font-size:32px; }
-  .type-poster>em,.stories .type-poster>em { margin-left:28px; }
-  .silver-game .game-heading>h2 { font-size:52px; }
-  .about.lower-section .about-copy h2 { font-size:72px; }
-}
-@media(max-width:700px) {
-  .lower-section .section-head h2.type-poster,.commercial .commercial-title h2.type-poster { font-size:36px; gap:10px; }
-  .lower-section .type-poster>span:not(.type-kicker) { font-size:27px; }
-  .type-poster .type-kicker { font-size:11px; margin-bottom:12px; }
-  .type-poster>em,.stories .type-poster>em,.commercial .type-poster>em { margin-left:24px; }
-  .journal-preview .type-poster>em { margin-left:0; }
-  .about.lower-section .about-copy h2 { font-size:64px; }
-  .silver-game .game-heading>h2 { font-size:44px; }
-  .experiments .goose-title>span { font-size:80px; }
-  .lower-section .mogule-stage-title h3 { font-size:48px; }
-}
-@media(max-width:370px) {
-  .lower-section .section-head h2.type-poster,.commercial .commercial-title h2.type-poster { font-size:32px; }
-  .type-poster>em { margin-left:16px; }
 }

@@ -1,10 +1,11 @@
 ---
-interface Props { variant: "space" | "game" | "story"; }
+interface Props { variant: "space" | "game" | "story" | "shutu"; }
 const { variant } = Astro.props;
 const regions = {
   space: { x: 58, y: 80, width: 1095, height: 232, inverse: false },
   game: { x: 58, y: 414, width: 840, height: 238, inverse: true },
   story: { x: 58, y: 758, width: 835, height: 230, inverse: true },
+  shutu: { x: 248, y: 316, width: 1038, height: 360, inverse: true },
 };
 const region = regions[variant];
 const id = `title-art-${variant}`;
@@ -22,7 +23,7 @@ const base = import.meta.env.BASE_URL;
       </feComponentTransfer>
     </filter>
     <mask id={id} maskUnits="userSpaceOnUse" x={region.x} y={region.y} width={region.width} height={region.height} style="mask-type:luminance">
-      <image href={`${base}assets/images/approved-title-study.png`} x="0" y="0" width="1536" height="1024" filter={`url(#${id}-ink)`} />
+      <image href={`${base}assets/images/${variant === "shutu" ? "shutu-title-study.png" : "approved-title-study.png"}`} x="0" y="0" width="1536" height="1024" filter={`url(#${id}-ink)`} />
     </mask>
   </defs>
   <rect x={region.x} y={region.y} width={region.width} height={region.height} fill="currentColor" mask={`url(#${id})`} />
